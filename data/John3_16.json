@@ -1,0 +1,30 @@
+{
+  "nodes": [
+      { "name": "For", "group": "John 3:16", "id": 0 }, 
+      { "name": "God", "group": "John 3:16", "id": 1 },  
+      { "name": "so", "group": "John 3:16", "id": 2 },
+      { "name": "loved", "group": "FamRi", "id": 3 },
+      { "name": "the", "group": "FamOr", "id": 4 },
+      { "name": "world,", "group": "FamGr", "id": 5 },
+      { "name": "that", "group": "FamGr", "id": 6 },
+      { "name": "He", "group": "FamKr", "id": 7 },
+      { "name": "gave", "group": "FamRi", "id": 8 },
+      { "name": "his", "group": "FamRi", "id": 9 },
+      { "name": "only", "group": "FamRi", "id": 10 },
+      { "name": "Son,", "group": "FamRi", "id": 11 },
+      { "name": "that", "group": "FamRi", "id": 12 },
+      { "name": "whoever", "group": "FamAr", "id": 13 },
+      { "name": "believes", "group": "FamAr", "id": 14 },
+      { "name": "in", "group": "FamAr", "id": 15 },
+      { "name": "Him", "group": "FamTo", "id": 16 },
+      { "name": "should", "group": "FamOr", "id": 17 },
+      { "name": "not", "group": "FamKr", "id": 18 },
+      { "name": "perish", "group": "FamKr", "id": 19 },
+      { "name": "but", "group": "FamKr", "id": 20 },
+      { "name": "have", "group": "FamOr", "id": 21 },
+      { "name": "eternal", "group": "FamOr", "id": 22 },
+      { "name": "life.", "group": "FamSh", "id": 23 }
+  ],
+  "edges": [
+  ]
+}
