@@ -22,8 +22,8 @@ def index(name='Memorizer'):
 # Resource files
 @web.route('/resource/<filename>')
 def index(filename):
-    res_path = os.path.dirname(os.path.realpath(__file__)) + r'\resources'
-    print('res_path: ' + res_path)
+    res_path = os.path.dirname(os.path.realpath(__file__)) + r'\resource'
+    #print('res_path: ' + res_path)
     return web.static_file(filename, root=res_path)
 
 
@@ -31,7 +31,7 @@ def index(filename):
 @web.route('/app/<filename>')
 def index(filename):
     app_path = os.path.dirname(os.path.realpath(__file__)) + r'\app'
-    print('app_path: ' + app_path)
+    #print('app_path: ' + app_path)
     return web.static_file(filename, root=app_path)
 
 
@@ -39,7 +39,7 @@ def index(filename):
 @web.route('/data/<filename>')
 def index(filename):
     data_path = os.path.dirname(os.path.realpath(__file__)) + r'\data'
-    print('data_path: ' + data_path)
+    #print('data_path: ' + data_path)
     return web.static_file(filename, root=data_path)
 
 

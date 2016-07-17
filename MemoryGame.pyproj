@@ -27,20 +27,22 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="data\" />
+    <Folder Include="resource\" />
+    <Folder Include="resource\" />
     <Folder Include="views\" />
-    <Folder Include="resources\" />
+    <Folder Include="resource\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="app\mem_game.css" />
-    <Content Include="app\mem_game.js" />
-    <Content Include="data\John3_16.json" />
+    <Content Include="app\mem_game_d3.js" />
+    <Content Include="app\page_control.js" />
+    <Content Include="data\texts.json" />
     <Content Include="LICENSE" />
+    <Content Include="resource\d3.min.js" />
+    <Content Include="resource\jquery-3.0.0.min.js" />
     <Content Include="views\mem_game.tpl" />
     <Content Include="README.md" />
-    <Content Include="resources\d3.js" />
-    <Content Include="resources\d3.min.js" />
-    <Content Include="resources\jquery-3.0.0.min.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
