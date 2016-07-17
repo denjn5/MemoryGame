@@ -11,7 +11,7 @@ import os
 
 # Memory Game
 @web.route('/')
-@web.route('/mem/<name>')
+@web.route('/<name>')
 @web.view('mem_game')
 def index(name='Memorizer'):
     #path = os.path.dirname(os.path.realpath(__file__)) + r'\app'

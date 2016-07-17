@@ -27,13 +27,16 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="data\" />
+    <Folder Include="views\" />
     <Folder Include="resources\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".gitignore" />
     <Content Include="app\mem_game.css" />
     <Content Include="app\mem_game.js" />
     <Content Include="data\John3_16.json" />
-    <Content Include="mem_game.tpl" />
+    <Content Include="LICENSE" />
+    <Content Include="views\mem_game.tpl" />
     <Content Include="README.md" />
     <Content Include="resources\d3.js" />
     <Content Include="resources\d3.min.js" />

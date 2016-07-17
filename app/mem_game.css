@@ -4,10 +4,6 @@
 }
 
 
-.circle {
-
-}
-
 .edge {
     stroke: black;
     stroke-width: 1;
@@ -15,6 +11,6 @@
 
 .text {
     font-family: Calibri;
-    font-size: x-small;
+    font-size: 12px;
 }
 

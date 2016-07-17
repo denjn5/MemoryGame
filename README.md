@@ -1,5 +1,5 @@
 # MemoryGame
-A simple game that will, eventually, help you memorize important things.
+[Just a simple beginning to this game....] A little game that will, eventually, help you memorize important things.
 
 ## Simplest Game Plan
 Player begins game by opening web page. All words from selected text pop onto screen as small bubbles. Player then clicks bubble in correct order. Bubbles connect as player clicks them and float to upper-left.
