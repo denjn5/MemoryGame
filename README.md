@@ -27,3 +27,15 @@ Player begins game by opening web page. All words from selected text pop onto sc
 * Have all dots change color when section is completed?
 * 
 
+To do memory game
+<ul>
+<li>turn to squares</li>
+<li>move to upper left</li>
+<li>transform instead of simply set</li>
+<li>hint options: say it, first letters, text color from black to white</li>
+<li>improve collision detection (so bubbles move out of the way)</li>
+<li>add timer</li>
+<li>add restart button</li>
+<li>color? NER, nouns, verbs</li>
+<li>quiz types: string, matching (2 sets of bubbles), multiple choice (question on top, answers as bubbles)</li>
+</ul>
