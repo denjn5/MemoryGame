@@ -5,14 +5,15 @@
 }
 
 
-.edge {
-    stroke: black;
-    stroke-width: 1;
+.link {
+    stroke: lightgray;
+    stroke-width: 1px;
 }
 
 .text {
     font-family: Calibri;
     font-size: 12px;
+    color: black;
 }
 
 #force {

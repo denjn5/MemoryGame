@@ -1,8 +1,8 @@
 # MemoryGame
-[Just a simple beginning to this game....] A little game that will, eventually, help you memorize important things.
+[A simple beginning....] A little game that will, eventually, help you memorize big ideas.
 
 ## Simplest Game Plan
-Player begins game by opening web page. All words from selected text pop onto screen as small bubbles. Player then clicks bubble in correct order. Bubbles connect as player clicks them and float to upper-left.
+Player begins game. Each word from selected text pop onto screen as small bubbles. Player then clicks bubble in correct order. Bubbles connect as player clicks them and float to upper-left.
 
 ## TODO
 * Move template to App directory.

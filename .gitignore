@@ -252,3 +252,8 @@ paket-files/
 *.sln.iml
 /app/example.html
 /app/svg_shapes.html
+/app/AR.html
+/app/AROrig.html
+/app/ClickToAdd.html
+/app/UDV.html
+/resource/d3.v3.min.js

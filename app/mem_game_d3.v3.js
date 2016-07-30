@@ -11,6 +11,7 @@
 // load the external data
 var lastX = -20;
 var lastY = 25;
+var answers = [];
 
 
 //Width and height
@@ -40,6 +41,7 @@ d3.json("/data/texts.json", function (error, textsData) {
 
 
     // start() calls the tick() method repeatedly to lay out the graph.
+    // https://bl.ocks.org/mbostock/1095795 add / remove nodes
     force
         .nodes(wordsList)
         .links(wordsLinks)
@@ -53,10 +55,12 @@ d3.json("/data/texts.json", function (error, textsData) {
         .style("opacity", 1);
 
     var gnodes = svg.selectAll('g.gnode')
+        //.data(wordsList, function (d) { return "node" + d.id; }) // adds ID to circle not gnode...
         .data(wordsList)
         .enter()
         .append('g')
         .classed('gnode', true)
+        .attr("id", function (d) { return "node" + d.id; })
         //.on("dblclick", dblclick)
         .call(force.drag);
 
@@ -101,14 +105,53 @@ d3.json("/data/texts.json", function (error, textsData) {
             //.attr("r", 30)
         })
         .on('click', function (d) {
-            d.fixed = !d.fixed
-            d.x = d.px = lastX = lastX + 40;
-            d.y = d.py = lastY;
 
-            if (lastX >= w - 40) {
-                lastX = -20;
-                lastY = lastY + 40;
+            
+            if (d.fixed) {
+                // I want to be freeee!
+                d.fixed = false;
+
+                console.log(answers);
+                
+                // Find index of clicked ID in array; from there to end, set free 
+                // https://groups.google.com/forum/#!topic/d3-js/iRrVcIDpodM
+                clickedID = answers.findIndex(function (id) { return id == d.id; })
+                setFree = answers.splice(clickedID, answers.length - clickedID)
+                for (i = 0; i < setFree.length; ++i) {
+                     sfid = answers[i];
+                     d3.select("#node" + sfid).classed("fixed", false);
+                }
+
+                // plan
+                // 1) Find ID in answers array: clickedID = answers.findIndex(function(id) { return id == 7; })
+                // 2) Split the answer array into 2 parts
+                //      a) keep index 0 to just before id: setFree = answers.splice(clickedID, answers.length - clickedID)
+                //      b) loop through setFre and d.fixed = false
+                // for (i = 0; i < setFree.length; ++i) {
+                //     id = answers[i];
+                //     d3.select("#" + id).classed("fixed", false);
+                // }
+                // 
+            } else {
+                // Lock me down!
+                answers.push(d.id);
+
+                //d3.select(this).classed("fixed", true);
+                d.fixed = true;
+                d.x = d.px = lastX = lastX + 40;
+                d.y = d.py = lastY;
+                //d3.select("#node" + d.id)
+                //    .attr("transform", function (d) { return "translate(" + lastX + "," + lastY + ")"; });
+
+
+                // TODO: is string complete?  If so, WIN!
+
+                if (lastX >= w - 40) {
+                    lastX = -20;
+                    lastY = lastY + 40;
+                }
             }
+            
             tick();
         })
         // set back

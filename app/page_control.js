@@ -8,7 +8,7 @@ function gameTimer(timerLength) {
             $("#timer").text(timerLength)
         } else {
             $("#done").hide();
-            $("#message").text("Uh oh...  You may not be the best. Click 'Restart' to try again.");
+            $("#message").text("Uh oh. Not be the best. Click 'Restart' to try again.");
             $("#score").text("0");
             clearInterval(timerLength);
         }
@@ -21,7 +21,8 @@ function gameDone(msg) {
 };
 
 function setUpPage() {
-    gameTimer(61);
+    
+    gameTimer(6);
     $("#message").text("You 'da best?");
     //restartForce();
 }

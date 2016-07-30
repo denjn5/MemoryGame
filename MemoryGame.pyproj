@@ -34,10 +34,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="app\AROrig.html" />
+    <Content Include="app\AR.html" />
+    <Content Include="app\ClickToAdd.html" />
     <Content Include="app\mem_game.css" />
-    <Content Include="app\mem_game_d3.js" />
+    <Content Include="app\mem_game_d3.v4.js" />
+    <Content Include="app\mem_game_d3.v3.js" />
     <Content Include="app\page_control.js" />
+    <Content Include="app\UDV.html" />
     <Content Include="data\texts.json" />
+    <Content Include="data\AR.json" />
+    <Content Include="data\UDV.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="LICENSE" />
     <Content Include="resource\d3.min.js" />
     <Content Include="resource\jquery-3.0.0.min.js" />

@@ -1,32 +1,9 @@
 {
   "nodes": [
-      { "word": "For", "group": "John 3:16", "pos": "other", "id": 0 }, 
-      { "word": "God", "group": "John 3:16", "pos": "proper noun", "id": 1 },  
-      { "word": "so", "group": "John 3:16", "pos": "modifier", "id": 2 },
-      { "word": "loved", "group": "John 3:16", "pos": "verb", "id": 3 },
-      { "word": "the", "group": "John 3:16", "pos": "other", "id": 4 },
-      { "word": "world", "group": "John 3:16", "pos": "noun", "id": 5 },
-      { "word": "that", "group": "John 3:16", "pos": "other", "id": 6 },
-      { "word": "He", "group": "John 3:16", "pos": "noun", "id": 7 },
-      { "word": "gave", "group": "John 3:16", "pos": "verb", "id": 8 },
-      { "word": "his", "group": "John 3:16", "pos": "modifier", "id": 9 },
-      { "word": "only", "group": "John 3:16", "pos": "modifier", "id": 10 },
-      { "word": "Son", "group": "John 3:16", "pos": "noun", "id": 11 },
-      { "word": "that", "group": "John 3:16", "pos": "other", "id": 12 },
-      { "word": "whoever", "group": "John 3:16", "pos": "noun", "id": 13 },
-      { "word": "believes", "group": "John 3:16", "pos": "verb", "id": 14 },
-      { "word": "in", "group": "John 3:16", "pos": "modifier", "id": 15 },
-      { "word": "Him", "group": "John 3:16", "pos": "noun", "id": 16 },
-      { "word": "should", "group": "John 3:16", "pos": "verb", "id": 17 },
-      { "word": "not", "group": "John 3:16", "pos": "other", "id": 18 },
-      { "word": "perish", "group": "John 3:16", "pos": "verb", "id": 19 },
-      { "word": "but", "group": "John 3:16", "pos": "other", "id": 20 },
-      { "word": "have", "group": "John 3:16", "pos": "verb", "id": 21 },
-      { "word": "eternal", "group": "John 3:16", "pos": "modifier", "id": 22 },
-      { "word": "life", "group": "John 3:16", "pos": "noun", "id": 23 }
+      { "cit": "Eph 2:8", "text": "For it is by grace you have been saved, through faith-and this is not from yourselves, it is the gift of God." },
+      { "cit": "John 3:16", "text": "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."  }
   ],
-  "edges": [
-      { "source": 0, "target": 0, "connections": 3 }
+  "links": [
 
   ]
 }
