@@ -1,8 +1,15 @@
 {
   "nodes": [
-      { "cit": "Eph 2:8", "text": "For it is by grace you have been saved, through faith-and this is not from yourselves, it is the gift of God." },
-      { "cit": "John 3:16", "text": "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."  }
-  ],
+      { "cit": "Ephesians 2:8", "text": "For it is by grace you have been saved, through faith-and this is not from yourselves, it is the gift of God." },
+      { "cit": "John 3:16", "text": "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." },
+      { "cit": "2 Timothy 4:7", "text": "I have fought the good fight, I have finished the race, I have kept the faith." },
+      { "cit": "Gettysburg Address", "text": "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal." },
+      { "cit": "Constitution Preamble", "text": "We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defense, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America." },
+      { "cit": "Williams Shedd", "text": "A ship in harbour is safe, but that is not what ships are built for." },
+      { "cit": "Matthew 11:28", "text": "Come to me, all who labor and are heavy laden, and I will give you rest." },
+      { "cit": "Matthew 11:29", "text": "Take my yoke upon you, and learn from me, for I am gentle and lowly in heart, and you will find rest for your souls." },
+      { "cit": "Matthew 11:30", "text": "For my yoke is easy, and my burden is light." }
+],
   "links": [
 
   ]

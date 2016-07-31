@@ -1,4 +1,12 @@
-﻿// General variablees
+﻿// TODO:
+// * Unravelable (double-click undoes)
+
+// GAME:
+// * Better timer / scoring
+// * Hint words: I h___ f______ t__
+// * Hint speaker
+
+// General variablees
 var prevClicked = -1,   // ID of the most recent gnode that was clicked
     allWordData = [],   // All words (data) from text from json
     wordData = [],      // Words loaded (data) into simulation from json
@@ -12,12 +20,13 @@ var prevClicked = -1,   // ID of the most recent gnode that was clicked
     foci = [{ x: 100, y: h / 2 }, { x: 350, y: h / 2 }];
 
 // Set color palette for nodes
-var color = d3.scaleOrdinal(d3.schemeCategory10);
+//var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 // Size the pre-created svg palette
-var svg = d3.select("#force")
-    .attr("width", w)
-    .attr("height", h);
+var svg = d3.select("#force").attr("width", w).attr("height", h);
+
+var color = d3.scaleOrdinal().domain(0, 6)
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
 // Set forces in the simulation
 var simulation = d3.forceSimulation()
@@ -34,9 +43,11 @@ var radScale = d3.scaleLinear().domain([1, 15]).range([10, 50]);
 // Get text from json, then start simulation
 d3.json("/data/texts.json", function (error, textsData) {
 
-    var keyText = textsData.nodes.filter(function (obj) { if (obj.cit == "Eph 2:8") return true; else return false; });
+    // Get correct text and split
+    var keyText = textsData.nodes.filter(function (obj) { if (obj.cit == "2 Timothy 4:7") return true; else return false; });
     kt = keyText[0].text.replace("-", "- ").split(" ");
 
+    // 
     for (i = 0; i < kt.length; i++) {
         var firstIndex = kt.indexOf(kt[i]);
         var firstID = firstIndex > -1 ? Math.min(firstIndex, i) : i;
@@ -53,7 +64,7 @@ d3.json("/data/texts.json", function (error, textsData) {
         })
     }
 
-
+    // 
     for (i = 0; i < Math.min(initCount, allWordData.length) ; i++) {
         wordData.push(allWordData[i]);
     }
@@ -65,29 +76,24 @@ d3.json("/data/texts.json", function (error, textsData) {
     start();
 });
 
+// 
 function start() {
 
-    glinks = svg.selectAll(".link").data(wordLinks, function (d) {
-            return d.source.id +
-                "-" +
-                d.target.id;
-        })
+    // Create links
+    glinks = svg.selectAll(".link")
+        .data(wordLinks, function (d) { return d.source.id + "-" + d.target.id; })
         .enter().insert("line", ".gnode").attr("class", "link");
     //glink.exit().remove();
 
 
-    // Get current g-elements, add new if needed
+    // Create nodes (well, g-elements).  Add circles, text, & event listeners
     gnodes = svg.selectAll("g")
-        .data(wordData, function id(d, i) {
-            return d.id;
-        })
-        .enter()
-        .append("g")
-        .attr("class", function (d) { return "gnode w" + d.id; });
+        .data(wordData, function id(d, i) { return d.id; })
+        .enter().append("g").attr("class", function (d) { return "gnode w" + d.id; });
 
     circles = gnodes.append("circle").attr("class", function (d) { return "n" + d.id; })
         .attr("r", function (d) { return d.rad; }).style("fill", function (d, i) { return color(d.id); })
-        .attr("opacity", 0.6);
+        .attr("opacity", 0.7);
 
     texts = gnodes.append("text")
         .attr("text-anchor", "middle")
@@ -102,6 +108,7 @@ function start() {
             .on("drag", dragged)
             .on("end", dragEnded));
 
+    // Link data to simulation and set it in motion.
     simulation.nodes(wordData)
         .force("link").links(wordLinks);
 
@@ -113,32 +120,29 @@ function start() {
 
 function ticked(e) {
 
+
     var k = .2 * simulation.alpha();
 
-    // multi-foci
     svg.selectAll(".gnode").attr("transform", function (d) {
+        // Set node location, multi-foci
         d.y += (foci[d.fociLoc].y - d.y) * k;
         d.x += (foci[d.fociLoc].x - d.x) * k;
 
+        // But be sure that they don't go out-of-bounds
         d.y = Math.max(d.rad, Math.min(h - d.rad, d.y));
         d.x = Math.max(d.rad, Math.min(w - d.rad, d.x));
 
         return 'translate(' + [d.x, d.y] + ')';
     });
 
-    svg.selectAll(".link").attr("x1", function (d) { return d.source.x; })
-    .attr("y1", function (d) { return d.source.y; })
-    .attr("x2", function (d) { return d.target.x; })
-    .attr("y2", function (d) { return d.target.y; });
+    // Set link locations
+    svg.selectAll(".link")
+        .attr("x1", function (d) { return d.source.x; })
+        .attr("y1", function (d) { return d.source.y; })
+        .attr("x2", function (d) { return d.target.x; })
+        .attr("y2", function (d) { return d.target.y; });
 
 }
-
-
-var findNode = function (id) {
-    for (var i in wordData) {
-        if (wordData[i]["id"] === id) return wordData[i];
-    };
-};
 
 
 function dragStarted(d) {
