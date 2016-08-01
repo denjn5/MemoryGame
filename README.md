@@ -1,41 +1,20 @@
-# MemoryGame
-[A simple beginning....] A little game that will, eventually, help you memorize big ideas.
+# Memorizinator
+A little memory game to help you learn big ideas. (Works best on Chrome browswer. Feedback is welcome.)
 
 ## Simplest Game Plan
-Player begins game. Each word from selected text pop onto screen as small bubbles. Player then clicks bubble in correct order. Bubbles connect as player clicks them and float to upper-left.
+1) Navigate to page. Words from chosen text will pop in as bubbles.  Timer starts (1.5 seconds / word in text).
+2) Double click the bubbles in the proper order.
+3) Game provides feedback (lower-left) about Win, Loss, Error.
+4) Need a hint? 
+   * ShowIt. Show the full text message (toggles).
+   * SayIt. Audio of the text. [Only on Chrome]
+   * BoldIt. The next correct word will be bolded (toggles). [Does not repaint existing bubbles; so it's active on the next repaint.]
+5) Choose a new text in the upper right or Restart game in lower right.
 
 ## TODO
-* Move template to App directory.
+* Provide player more feedback about wrong choices.
+* Ability to unravel answer?
+* Have colors mean something? (paragraphs?)
+* Improve BoldIt (so it works "now")
+* Add an underscore based hint system ("I h--- f----- t-- g--- f----.")
 
-
-## Open
-* Do I fix the location of selected circles? Or change size?
-
-
-## Later 
-### Game Mechanics
-* Countdown timer, with points assigned based on how much time is left on the clock.  
-* Point tracker
-* Ability to choose which text.
-* Color-coding based on paragraph or verse (make this optional)
-* Restart button 
-
-
-### Visual
-* Use seperate gravity wells to keep "used" and "unused" words seperate.
-* Provide feedback about correct, incorrect choices?
-* Have all dots change color when section is completed?
-* 
-
-To do memory game
-<ul>
-<li>turn to squares</li>
-<li>move to upper left</li>
-<li>transform instead of simply set</li>
-<li>hint options: say it, first letters, text color from black to white</li>
-<li>improve collision detection (so bubbles move out of the way)</li>
-<li>add timer</li>
-<li>add restart button</li>
-<li>color? NER, nouns, verbs</li>
-<li>quiz types: string, matching (2 sets of bubbles), multiple choice (question on top, answers as bubbles)</li>
-</ul>

@@ -1,16 +1,6 @@
 ﻿<!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-.node {
-    stroke: black;
-    stroke-width: 0;
-}
-
-.link {
-    stroke: lightgray;
-    stroke-width: 1px;
-}
-
 body {
     font-family: Calibri;
     font-size: 12px;
@@ -23,6 +13,33 @@ svg {
     height: 100%;
 }
 
+.node {
+    stroke: black;
+    stroke-width: 0;
+}
+
+.text { /* centers text in node */
+    text-anchor: middle;
+    alignment-baseline: central;
+    pointer-events: none;
+}
+
+.next { /* for boldIt hint */
+    font-weight: bold;
+}
+
+.link {
+    stroke: lightgray;
+    stroke-width: 1px;
+}
+
+#container {
+    position: relative;
+    display: inline-block;
+    height: 300px;
+    width: 500px;
+}
+
 #score {
     position: absolute;
     top: 3px;
@@ -33,19 +50,13 @@ svg {
     position: absolute;
     top: 3px;
     left: 20px;
+    visibility: hidden;
 }
 
 #selection {
     position: absolute;
     top: 3px;
     right: 2px;
-}
-
-#container {
-    position: relative;
-    display: inline-block;
-    height: 300px;
-    width: 500px;
 }
 
 #message {
@@ -59,15 +70,10 @@ svg {
     bottom: 2px;
     right: 2px;
 }
-
-.next {
-    font-weight: bold;
-}
-
 </style>
 <body>
     <div id="container"><svg>
-        <div id="score">?</div>
+        <b><div id="score"></div></b>
         <div id="hints">
             <button id="sayit" onclick="gameManager('sayit');">Say It</button>&nbsp;
             <button id="showit" onclick="gameManager('showit');">Show It</button>&nbsp;
@@ -88,12 +94,8 @@ svg {
 
 <script src="//d3js.org/d3.v4.js"></script>
 <script>
-    // TODO:
-    // TODO: Unravelable (double-click undoes)
-    // TODO: Hints: words (I h___ f______ t__), highlighting, speaker
-
     // General variablees
-    var prevClicked = -1,   // ID of the most recent gnode that was clicked
+    var prevClickedID = -1,   // ID of the most recent gnode that was clicked
         allWordData = [],   // All words (data) from text from json
         wordData = [],      // Words loaded (data) into simulation from json
         wordLinks = [],     // Links (data) in the simulation
@@ -101,12 +103,14 @@ svg {
         h = 300,            // Height of the svg palette
         rad = 20,           // Radius of the word circles
         initCount = 7,      // Number of words to show at beginning of game
-        answerKey = [],     // The right answer
-        playerAnswer = [],  // 
-        foci = [{ x: 100, y: h / 2 }, { x: 350, y: h / 2 }],
+        answerKey = [],     // A string of wordID's indicating the correct answer
+        playerAnswer = [],  // A string of wordID's indicating the player's answer
+        foci = [{ x: 100, y: h / 2 }, { x: 350, y: h / 2 }], // Sets 2 foci on page
         defCitation = "2 Timothy 4:7",
-        text,
-        boldIt = false;
+        text,               // The text to be memorized
+        boldIt = false,     // Is the boltIt hint be active?
+        glinks,             // Active links on the game
+        gnodes;             // The current set of gnodes
 
     // Get svg handle, set up color and radius scale
     var svg = d3.select("svg");
@@ -120,20 +124,16 @@ svg {
         .force("charge", d3.forceManyBody().strength(-50))
         .force("collide", d3.forceCollide(function (d) { return d.rad; }));
 
-    // Define the 
-    var glinks,         // Active links on the game
-        gnodes;         // The current set of gnodes
-
     // Get text from json, then start simulation
     function build(citation) {
         d3.json("/data/texts.json", function (error, textsData) {
 
-            // Get correct text and split
+            // Get and split requested text and split, save text for later use.
             var keyText = textsData.nodes.filter(function (obj) { if (obj.cit == citation) return true; else return false; });
             text = keyText[0].text;
             var kt = text.replace("-", "- ").split(" ");
 
-            // 
+            // Format data, create answerkey
             for (i = 0; i < kt.length; i++) {
                 var firstIndex = kt.indexOf(kt[i]);
                 var firstID = firstIndex > -1 ? Math.min(firstIndex, i) : i;
@@ -142,16 +142,16 @@ svg {
                 allWordData.push({
                     word: kt[i],
                     id: i,
-                    wordid: firstID,
+                    wordid: firstID, // identical words have the same wordid
                     x: 0,
                     y: ~~(Math.random() * h),
                     rad: radScale(kt[i].length),
-                    show: 0,
-                    answerSet: 0
+                    show: 0,        // for later use?
+                    answerSet: 0    // for later use?
                 })
             }
 
-            // 
+            // Push word data into active dataset
             for (i = 0; i < Math.min(initCount, allWordData.length) ; i++) {
                 allWordData[i].show = 1;
                 wordData.push(allWordData[i]);
@@ -168,7 +168,7 @@ svg {
     build(defCitation);
 
 
-    // 
+    // Build the force simulation
     function start() {
 
         // Create links
@@ -188,11 +188,8 @@ svg {
             .attr("r", function (d) { return d.rad; }).style("fill", function (d, i) { return color(d.id); })
             .attr("opacity", 0.7);
 
-        var texts = gnodes.append("text")
-            .attr("text-anchor", "middle")
-            .attr("alignment-baseline", "central")
-            .attr("class", function (d) { return "text w" + d.id; })
-            .style("pointer-events", "none")
+        var texts = gnodes.append("text") 
+            .attr("class", function (d) { return "text w" + d.id; }) // Tie into CSS
             .text(function (d) { return (d.word); });
 
         var actions = gnodes.on("dblclick", nodeClicked)
@@ -210,7 +207,7 @@ svg {
             .restart();
     }
 
-
+    // Manage node & link movement
     function ticked(e) {
         var k = .2 * simulation.alpha();
 
@@ -219,7 +216,7 @@ svg {
             d.y += (foci[d.answerSet].y - d.y) * k;
             d.x += (foci[d.answerSet].x - d.x) * k;
 
-            // But be sure that they don't go out-of-bounds
+            // But be sure that nodes don't go out-of-bounds
             d.y = Math.max(d.rad, Math.min(h - d.rad, d.y));
             d.x = Math.max(d.rad, Math.min(w - d.rad, d.x));
 
@@ -254,36 +251,34 @@ svg {
         d.fy = null;
     }
 
+    // User (double) clicked a node
     function nodeClicked(d) {
-
-        // Move the node, and a link
-        d.answerSet = 1;
+        d.answerSet = 1; // Moves the gnode over to the answer side.
         if (allWordData.length > wordData.length) {
             allWordData[wordData.length].show = 1;
-            wordData.push(allWordData[wordData.length]);
+            wordData.push(allWordData[wordData.length]); // Gets the next word.
         }
 
-        if (prevClicked != -1) { wordLinks.push({ "source": prevClicked, "target": d.id }); }
+        // Add a link
+        if (prevClickedID != -1) { wordLinks.push({ "source": prevClickedID, "target": d.id }); }
         start();
 
-        // Update prevClicked and check the answer
-        prevClicked = d.id;
-        playerAnswer.push(d.wordid);
-        svg.selectAll(".text").classed("next", function (d) { return (boldIt && d.wordid == answerKey[playerAnswer.length]) ? true : false; });
-        if (playerAnswer.toString() == answerKey.toString()) { gameManager("win"); }
+        // Update prevClickedID and check the answer
+        prevClickedID = d.id;
+        playerAnswer.push(d.wordid);    // Update the players answer
+        svg.selectAll(".text")          // Bold next word
+            .classed("next", function (d) { return (boldIt && d.wordid == answerKey[playerAnswer.length]) ? true : false; });
+        if (playerAnswer.toString() == answerKey.toString()) { gameManager("win"); } // Check answer or error
         else if (playerAnswer.toString() != answerKey.slice(0, playerAnswer.length).toString()) { gameManager("incorrect"); }
     }
 
-</script>
-<script>
-
-    var score = document.getElementById("score"),
-        message = document.getElementById("message"),
-        timer,
-        timerLength = 20;
+// ********** Begin Game Mechanics / Management ********** 
+    var message = document.getElementById("message"),   // Get handle on the message DIV
+        timer,                                          // Allows timer to be managed from multiple places
+        timerLength = 20;                               // Allows clean management of timer length
 
     function gameManager(event) {
-        
+
         switch (event) {
             case "incorrect":
                 message.innerHTML = "<b>There's a problem...</b>";
@@ -293,14 +288,16 @@ svg {
                 clearInterval(timer);
                 timer = setInterval(gameTimer, 1000);
                 message.innerHTML = "";
-                score = document.getElementById("hints").style.visibility = "visible";
+                document.getElementById("hints").style.visibility = "visible";
                 break;
             case "win":
-                message.innerHTML = "<b>You WON! Score = " + timerLength + "</b>";
+                message.innerHTML = "<b>You WON! Score = " + timerLength + 1 + "</b>";
+                document.getElementById("hints").style.visibility = "hidden";
                 clearInterval(timer);
                 break;
             case "loss":
                 message.innerHTML = "I'm sorry for your loss.";
+                document.getElementById("hints").style.visibility = "hidden";
                 clearInterval(timer);
                 break;
             case "restart":
@@ -318,28 +315,22 @@ svg {
                 if (message.innerHTML == text) { message.innerHTML = ""; }
                 else { message.innerHTML = text; }
                 break;
-
         }
-
-        // change chooser to hinter
-        // watch for new game messages
-        // announce win / score or loss
     }
 
 
     function gameTimer() {
-            if (timerLength >= 0) {
-                score.innerHTML = timerLength--;
-            } else {
-                gameManager("loss")
-                clearInterval(timer);
-            }
+        if (timerLength >= 0) {
+            document.getElementById("score").innerHTML = timerLength--;
+        } else {
+            gameManager("loss")
+            clearInterval(timer);
+        }
     }
 
 
     function newText(newValue) {
-
-        prevClicked = -1;   // ID of the most recent gnode that was clicked
+        prevClickedID = -1;   // ID of the most recent gnode that was clicked
         allWordData = [];   // All words (data) from text from json
         wordData = [];      // Words loaded (data) into simulation from json
         wordLinks = [];     // Links (data) in the simulation
@@ -350,6 +341,5 @@ svg {
         start();
         build(newValue);
     }
-
 
 </script>
