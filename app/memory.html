@@ -83,7 +83,6 @@ svg {
             <option value="Gettysburg Address">Gettysburg Address</option>
             <option value="Constitution Preamble">Constitution Preamble</option>
             <option value="Williams Shedd">Williams Shedd</option>
-            <option value="Ephesians 2:8">Ephesians 2:8</option>
             <option value="John 3:16">John 3:16</option>
             <option selected="selected" value="2 Timothy 4:7">2 Timothy 4:7</option>
         </select>
@@ -157,9 +156,7 @@ svg {
                 wordData.push(allWordData[i]);
             }
 
-            for (i = 0; i < textsData.links.length ; i++) {
-                wordLinks.push(textsData.links[i]);
-            }
+            // for (i = 0; i < textsData.links.length ; i++) { wordLinks.push(textsData.links[i]); }
 
             gameManager("start");
             start();
@@ -305,11 +302,17 @@ svg {
                 newText(sel.options[sel.selectedIndex].text);
                 break;
             case "sayit":
-                var msg = new SpeechSynthesisUtterance(text);
-                window.speechSynthesis.speak(msg);
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                } else {
+                    var msg = new SpeechSynthesisUtterance(text);
+                    window.speechSynthesis.speak(msg);
+                    message.innerHTML = "[Say It only works in Chrome browser.]";
+                }         
                 break;
             case "boldit":
                 boldIt = !boldIt;
+                message.innerHTML = "Bolding: " + (boldIt ? "On" : "Off");
                 break;
             case "showit":
                 if (message.innerHTML == text) { message.innerHTML = ""; }
