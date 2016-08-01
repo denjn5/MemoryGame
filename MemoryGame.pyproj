@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="app\memory - Copy.html" />
     <Content Include="app\memory.html" />
     <Content Include="app\AROrig.html" />
     <Content Include="app\AR.html" />

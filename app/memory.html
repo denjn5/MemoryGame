@@ -25,8 +25,14 @@ svg {
 
 #score {
     position: absolute;
-    top: 0px;
+    top: 3px;
     left: 3px;
+}
+
+#hints {
+    position: absolute;
+    top: 3px;
+    left: 20px;
 }
 
 #selection {
@@ -44,46 +50,47 @@ svg {
 
 #message {
     position: absolute;
-    bottom: 0;
+    bottom: 2px;
     left: 3px;
 }
 
-#button {
+#restart {
     position: absolute;
     bottom: 2px;
     right: 2px;
 }
 
+.next {
+    font-weight: bold;
+}
 
 </style>
 <body>
-    <div id="container">
-        <svg>
-            <b><div id="score"></div></b>
-    <select id="selection" onchange="newText(value);">
-        <option value="Gettysburg Address">Gettysburg Address</option>
-        <option value="Constitution Preamble">Constitution Preamble</option>
-        <option value="Williams Shedd">Williams Shedd</option>
-        <option value="Ephesians 2:8">Ephesians 2:8</option>
-        <option value="John 3:16">John 3:16</option>
-        <option selected="selected" value="2 Timothy 4:7">2 Timothy 4:7</option>
-        
-    </select>
-    <div id="message"><b>Memorizinator</b> (A little game to help you learn big ideas.)</div>
-<button id="button">Restart</button>
-</svg>
-    </div>
+    <div id="container"><svg>
+        <div id="score">?</div>
+        <div id="hints">
+            <button id="sayit" onclick="gameManager('sayit');">Say It</button>&nbsp;
+            <button id="showit" onclick="gameManager('showit');">Show It</button>&nbsp;
+            <button id="boldit" onclick="gameManager('boldit');">Bold It</button>
+        </div>
+        <select id="selection" onchange="newText(value);">
+            <option value="Gettysburg Address">Gettysburg Address</option>
+            <option value="Constitution Preamble">Constitution Preamble</option>
+            <option value="Williams Shedd">Williams Shedd</option>
+            <option value="Ephesians 2:8">Ephesians 2:8</option>
+            <option value="John 3:16">John 3:16</option>
+            <option selected="selected" value="2 Timothy 4:7">2 Timothy 4:7</option>
+        </select>
+            <div id="message"><b>Memorizinator</b> (A little game to help you learn big ideas.)</div>
+        <button id="restart" onclick="gameManager('restart');">Restart</button>
+    </svg></div>
 </body>
 
 <script src="//d3js.org/d3.v4.js"></script>
 <script>
     // TODO:
-    // * Unravelable (double-click undoes)
-
-    // GAME:
-    // * Better timer / scoring
-    // * Hint words: I h___ f______ t__
-    // * Hint speaker
+    // TODO: Unravelable (double-click undoes)
+    // TODO: Hints: words (I h___ f______ t__), highlighting, speaker
 
     // General variablees
     var prevClicked = -1,   // ID of the most recent gnode that was clicked
@@ -97,16 +104,15 @@ svg {
         answerKey = [],     // The right answer
         playerAnswer = [],  // 
         foci = [{ x: 100, y: h / 2 }, { x: 350, y: h / 2 }],
-        defCitation = "2 Timothy 4:7";
+        defCitation = "2 Timothy 4:7",
+        text,
+        boldIt = false;
 
-    // Set color palette for nodes
-    //var color = d3.scaleOrdinal(d3.schemeCategory10);
-
-    // Size the pre-created svg palette
+    // Get svg handle, set up color and radius scale
     var svg = d3.select("svg");
-    
     var color = d3.scaleOrdinal().domain(0, 6)
         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    var radScale = d3.scaleLinear().domain([1, 15]).range([10, 50]);
 
     // Set forces in the simulation
     var simulation = d3.forceSimulation()
@@ -118,15 +124,14 @@ svg {
     var glinks,         // Active links on the game
         gnodes;         // The current set of gnodes
 
-    var radScale = d3.scaleLinear().domain([1, 15]).range([10, 50]);
-
     // Get text from json, then start simulation
     function build(citation) {
         d3.json("/data/texts.json", function (error, textsData) {
 
             // Get correct text and split
             var keyText = textsData.nodes.filter(function (obj) { if (obj.cit == citation) return true; else return false; });
-            kt = keyText[0].text.replace("-", "- ").split(" ");
+            text = keyText[0].text;
+            var kt = text.replace("-", "- ").split(" ");
 
             // 
             for (i = 0; i < kt.length; i++) {
@@ -156,11 +161,12 @@ svg {
                 wordLinks.push(textsData.links[i]);
             }
 
+            gameManager("start");
             start();
-            gameManager("start", allWordData.length);
         });
     }
     build(defCitation);
+
 
     // 
     function start() {
@@ -171,26 +177,25 @@ svg {
             .enter().insert("line", ".gnode").attr("class", "link");
         glinks.exit().remove();
 
-
         // Create nodes (well, g-elements).  Add circles, text, & event listeners
         gnodes = svg.selectAll("g")
             .data(wordData, function id(d, i) { return d.id; })
-            .enter().append("g").attr("class", function (d) { return "gnode w" + d.id; });
+            .enter().append("g").attr("class", function (d) { return "gnode g" + d.id; })
+            .classed("next", function (d) { return (boldIt && d.wordid == 0) ? true : false ; });
         gnodes.exit().remove();
 
-
-        circles = gnodes.append("circle").attr("class", function (d) { return "n" + d.id; })
+        var circles = gnodes.append("circle").attr("class", function (d) { return "c" + d.id; })
             .attr("r", function (d) { return d.rad; }).style("fill", function (d, i) { return color(d.id); })
             .attr("opacity", 0.7);
 
-        texts = gnodes.append("text")
+        var texts = gnodes.append("text")
             .attr("text-anchor", "middle")
             .attr("alignment-baseline", "central")
-            .attr("class", "text")
+            .attr("class", function (d) { return "text w" + d.id; })
             .style("pointer-events", "none")
             .text(function (d) { return (d.word); });
 
-        actions = gnodes.on("dblclick", nodeClicked)
+        var actions = gnodes.on("dblclick", nodeClicked)
             .call(d3.drag()
                 .on("start", dragStarted)
                 .on("drag", dragged)
@@ -207,8 +212,6 @@ svg {
 
 
     function ticked(e) {
-
-
         var k = .2 * simulation.alpha();
 
         svg.selectAll(".gnode").attr("transform", function (d) {
@@ -229,9 +232,7 @@ svg {
             .attr("y1", function (d) { return d.source.y; })
             .attr("x2", function (d) { return d.target.x; })
             .attr("y2", function (d) { return d.target.y; });
-
     }
-
 
     function dragStarted(d) {
         d3.select(this).raise().classed("active", true);
@@ -258,39 +259,66 @@ svg {
         // Move the node, and a link
         d.answerSet = 1;
         if (allWordData.length > wordData.length) {
-            allWordData[i].show = 1;
+            allWordData[wordData.length].show = 1;
             wordData.push(allWordData[wordData.length]);
         }
+
         if (prevClicked != -1) { wordLinks.push({ "source": prevClicked, "target": d.id }); }
         start();
 
         // Update prevClicked and check the answer
         prevClicked = d.id;
         playerAnswer.push(d.wordid);
-        if (playerAnswer.toString() == answerKey.toString()) { gameManager("win", 0); }
-        else if (playerAnswer.toString() != answerKey.slice(0, playerAnswer.length).toString()) { gameManager("incorrect", 0); }
+        svg.selectAll(".text").classed("next", function (d) { return (boldIt && d.wordid == answerKey[playerAnswer.length]) ? true : false; });
+        if (playerAnswer.toString() == answerKey.toString()) { gameManager("win"); }
+        else if (playerAnswer.toString() != answerKey.slice(0, playerAnswer.length).toString()) { gameManager("incorrect"); }
     }
 
 </script>
 <script>
 
-    var score = document.getElementById("score");
-    var message = document.getElementById("message");
+    var score = document.getElementById("score"),
+        message = document.getElementById("message"),
+        timer,
+        timerLength = 20;
 
-    function gameManager(event, attribute) {
+    function gameManager(event) {
         
         switch (event) {
-            case "start":
-                gameTimer(attribute * 1.5);
-                message.innerHTML = "<i>Do good.</i>";
-                break;
-            case "win":
-                message.innerHTML = "<b>You WON! Score = " + score.innerHTML + "</b>";
-                //clearInterval(timerLength);
-                break;
             case "incorrect":
                 message.innerHTML = "<b>There's a problem...</b>";
                 break;
+            case "start":
+                timerLength = ~~(allWordData.length * 1.5);
+                clearInterval(timer);
+                timer = setInterval(gameTimer, 1000);
+                message.innerHTML = "";
+                score = document.getElementById("hints").style.visibility = "visible";
+                break;
+            case "win":
+                message.innerHTML = "<b>You WON! Score = " + timerLength + "</b>";
+                clearInterval(timer);
+                break;
+            case "loss":
+                message.innerHTML = "I'm sorry for your loss.";
+                clearInterval(timer);
+                break;
+            case "restart":
+                var sel = document.getElementById("selection");
+                newText(sel.options[sel.selectedIndex].text);
+                break;
+            case "sayit":
+                var msg = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(msg);
+                break;
+            case "boldit":
+                boldIt = !boldIt;
+                break;
+            case "showit":
+                if (message.innerHTML == text) { message.innerHTML = ""; }
+                else { message.innerHTML = text; }
+                break;
+
         }
 
         // change chooser to hinter
@@ -299,30 +327,27 @@ svg {
     }
 
 
-    function gameTimer(timerLength) {
-
-        setInterval(function () {
-            timerLength--;
+    function gameTimer() {
             if (timerLength >= 0) {
-                score.innerHTML = timerLength
+                score.innerHTML = timerLength--;
             } else {
-                score.innerHTML = "0";
-                clearInterval(timerLength);
+                gameManager("loss")
+                clearInterval(timer);
             }
-        }, 1000);
     }
+
 
     function newText(newValue) {
 
-        var prevClicked = -1,   // ID of the most recent gnode that was clicked
-            allWordData = [],   // All words (data) from text from json
-            wordData = [],      // Words loaded (data) into simulation from json
-            wordLinks = [],     // Links (data) in the simulation
-            answerKey = [],     // The right answer
-            playerAnswer = [];  //
+        prevClicked = -1;   // ID of the most recent gnode that was clicked
+        allWordData = [];   // All words (data) from text from json
+        wordData = [];      // Words loaded (data) into simulation from json
+        wordLinks = [];     // Links (data) in the simulation
+        answerKey = [];     // The right answer
+        playerAnswer = [];  //
+
         d3.selectAll("svg > *").remove();
         start();
-
         build(newValue);
     }
 
