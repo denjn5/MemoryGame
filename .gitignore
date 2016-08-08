@@ -258,3 +258,6 @@ paket-files/
 /app/UDV.html
 /resource/d3.v3.min.js
 /app/memory - Copy.html
+/app/bar_chart.html
+/app/orig.png
+/data/bar-data.csv

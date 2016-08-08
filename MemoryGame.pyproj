@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="app\bar_chart.html" />
     <Content Include="app\memory - Copy.html" />
     <Content Include="app\memory.html" />
     <Content Include="app\AROrig.html" />
@@ -44,6 +45,7 @@
     <Content Include="app\mem_game_d3.v3.js" />
     <Content Include="app\page_control.js" />
     <Content Include="app\UDV.html" />
+    <Content Include="data\bar-data.csv" />
     <Content Include="data\texts.json" />
     <Content Include="data\AR.json" />
     <Content Include="data\UDV.json">

@@ -1,96 +1,91 @@
 ﻿<!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-body {
-    font-family: Calibri;
-    font-size: 12px;
-    color: black;
-}
+    body {
+        font-family: Calibri;
+        font-size: 12px;
+        color: black;
+    }
 
-svg {
-    border: 1px solid black;
-    width: 100%;
-    height: 100%;
-}
+    svg {
+        border: 1px solid lightgray;
+        width: 100%;
+        height: 100%;
+    }
 
-.node {
-    stroke: black;
-    stroke-width: 0;
-}
+    .node {
+        stroke: black;
+        stroke-width: 0;
+    }
 
-.text { /* centers text in node */
-    text-anchor: middle;
-    alignment-baseline: central;
-    pointer-events: none;
-}
+    .text { /* centers text in node */
+        text-anchor: middle;
+        alignment-baseline: central;
+        pointer-events: none;
+    }
 
-.next { /* for boldIt hint */
-    font-weight: bold;
-}
+    .next { /* for boldIt hint */
+        font-weight: bold;
+    }
 
-.link {
-    stroke: lightgray;
-    stroke-width: 1px;
-}
+    .link {
+        stroke: lightgray;
+        stroke-width: 1px;
+    }
 
-#container {
-    position: relative;
-    display: inline-block;
-    height: 300px;
-    width: 500px;
-}
+    #container {
+        position: relative;
+        display: inline-block;
+        height: 300px;
+        width: 500px;
+    }
 
-#score {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-}
+    #score {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+    }
 
-#hints {
-    position: absolute;
-    top: 3px;
-    left: 20px;
-    visibility: hidden;
-}
+    #hints {
+        position: absolute;
+        top: 3px;
+        left: 20px;
+        visibility: hidden;
+    }
 
-#selection {
-    position: absolute;
-    top: 3px;
-    right: 2px;
-}
+    #selectText {
+        position: absolute;
+        top: 3px;
+        right: 2px;
+    }
 
-#message {
-    position: absolute;
-    bottom: 2px;
-    left: 3px;
-}
+    #message {
+        position: absolute;
+        bottom: 2px;
+        left: 3px;
+    }
 
-#restart {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-}
+    #restart {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+    }
 </style>
 <body>
-    <div id="container"><svg>
-        <b><div id="score"></div></b>
-        <div id="hints">
-            <button id="sayit" onclick="gameManager('sayit');">Say It</button>&nbsp;
-            <button id="showit" onclick="gameManager('showit');">Show It</button>&nbsp;
-            <button id="boldit" onclick="gameManager('boldit');">Bold It</button>
-        </div>
-        <select id="selection" onchange="newText(value);">
-            <option value="Gettysburg Address">Gettysburg Address</option>
-            <option value="Constitution Preamble">Constitution Preamble</option>
-            <option value="Williams Shedd">Williams Shedd</option>
-            <option value="John 3:16">John 3:16</option>
-            <option selected="selected" value="2 Timothy 4:7">2 Timothy 4:7</option>
-        </select>
+    <div id="container">
+        <svg>
+            <b><div id="score"></div></b>
+            <div id="hints">
+                <button id="sayit" onclick="gameManager('sayit');" title="Reads the text to you. Click again to silence.">Say It</button>&nbsp;
+                <button id="showit" onclick="gameManager('showit');" title="Show the text inthe lower corner. Click again to hide.">Show It</button>&nbsp;
+                <button id="boldit" onclick="gameManager('boldit');" title="Bold the next word you need to click. Click again to turn off.">Bold It</button>
+            </div>
+            <select id="selectText" onchange="newText(value);"></select>
             <div id="message"><b>Memorizinator</b> (A little game to help you learn big ideas.)</div>
-        <button id="restart" onclick="gameManager('restart');">Restart</button>
-    </svg></div>
+            <button id="restart" onclick="gameManager('restart');">Restart</button>
+        </svg>
+    </div>
 </body>
-
 <script src="//d3js.org/d3.v4.js"></script>
 <script>
     // General variablees
@@ -100,12 +95,11 @@ svg {
         wordLinks = [],     // Links (data) in the simulation
         w = 500,            // Width of the svg palette
         h = 300,            // Height of the svg palette
-        rad = 20,           // Radius of the word circles
         initCount = 7,      // Number of words to show at beginning of game
         answerKey = [],     // A string of wordID's indicating the correct answer
         playerAnswer = [],  // A string of wordID's indicating the player's answer
         foci = [{ x: 100, y: h / 2 }, { x: 350, y: h / 2 }], // Sets 2 foci on page
-        defCitation = "2 Timothy 4:7",
+        defCitation = "Williams Shedd",
         text,               // The text to be memorized
         boldIt = false,     // Is the boltIt hint be active?
         glinks,             // Active links on the game
@@ -126,6 +120,17 @@ svg {
     // Get text from json, then start simulation
     function build(citation) {
         d3.json("/data/texts.json", function (error, textsData) {
+
+            // Populate dropdown if it's empty
+            dd = document.getElementById("selectText");
+            if (dd.options.length == 0) {
+                for (var i = 0; i < textsData.nodes.length; i++) {
+                    var el = document.createElement("option");
+                    el.textContent = el.value = textsData.nodes[i].cit;
+                    el.selected = (textsData.nodes[i].cit == defCitation);
+                    dd.appendChild(el);
+                }
+            }
 
             // Get and split requested text and split, save text for later use.
             var keyText = textsData.nodes.filter(function (obj) { if (obj.cit == citation) return true; else return false; });
@@ -185,7 +190,7 @@ svg {
             .attr("r", function (d) { return d.rad; }).style("fill", function (d, i) { return color(d.id); })
             .attr("opacity", 0.7);
 
-        var texts = gnodes.append("text") 
+        var texts = gnodes.append("text")
             .attr("class", function (d) { return "text w" + d.id; }) // Tie into CSS
             .text(function (d) { return (d.word); });
 
@@ -250,26 +255,40 @@ svg {
 
     // User (double) clicked a node
     function nodeClicked(d) {
-        d.answerSet = 1; // Moves the gnode over to the answer side.
-        if (allWordData.length > wordData.length) {
-            allWordData[wordData.length].show = 1;
-            wordData.push(allWordData[wordData.length]); // Gets the next word.
+        if (d.answerSet == 0) {
+            d.answerSet = 1; // Moves the gnode over to the answer side.
+            if (allWordData.length > wordData.length) {
+                allWordData[wordData.length].show = 1;
+                wordData.push(allWordData[wordData.length]); // Gets the next word.
+            }
+
+            // Add a link
+            if (prevClickedID != -1) { wordLinks.push({ "source": prevClickedID, "target": d.id }); }
+            start();
+
+            // Update prevClickedID and check the answer
+            prevClickedID = d.id;
+            playerAnswer.push(d.wordid);    // Update the players answer
+            svg.selectAll(".text")          // Bold next word
+                .classed("next", function (d) { return (boldIt && d.wordid == answerKey[playerAnswer.length]) ? true : false; });
+            if (playerAnswer.toString() == answerKey.toString()) { gameManager("win"); } // Check answer or error
+            else if (playerAnswer.toString() != answerKey.slice(0, playerAnswer.length).toString()) { gameManager("incorrect"); }
+        } else {
+
+            var unwind = [];
+            var found = false;
+            for (i = 0; i < playerAnswer.length; i++) {
+                if (playerAnswer[i] == d.wordid || found) {
+                    found = true;
+                    unwind.push(playerAnswer[i]);
+                    //svg.select(".gnode").call
+                }
+            }
+            //alert(unwind);          
         }
-
-        // Add a link
-        if (prevClickedID != -1) { wordLinks.push({ "source": prevClickedID, "target": d.id }); }
-        start();
-
-        // Update prevClickedID and check the answer
-        prevClickedID = d.id;
-        playerAnswer.push(d.wordid);    // Update the players answer
-        svg.selectAll(".text")          // Bold next word
-            .classed("next", function (d) { return (boldIt && d.wordid == answerKey[playerAnswer.length]) ? true : false; });
-        if (playerAnswer.toString() == answerKey.toString()) { gameManager("win"); } // Check answer or error
-        else if (playerAnswer.toString() != answerKey.slice(0, playerAnswer.length).toString()) { gameManager("incorrect"); }
     }
 
-// ********** Begin Game Mechanics / Management ********** 
+// ********** Begin Game Mechanics / Management **********
     var message = document.getElementById("message"),   // Get handle on the message DIV
         timer,                                          // Allows timer to be managed from multiple places
         timerLength = 20;                               // Allows clean management of timer length
@@ -284,7 +303,7 @@ svg {
                 timerLength = ~~(allWordData.length * 1.5);
                 clearInterval(timer);
                 timer = setInterval(gameTimer, 1000);
-                message.innerHTML = "";
+                message.innerHTML = "Double-click the words in the correct order.";
                 document.getElementById("hints").style.visibility = "visible";
                 break;
             case "win":
@@ -298,7 +317,7 @@ svg {
                 clearInterval(timer);
                 break;
             case "restart":
-                var sel = document.getElementById("selection");
+                var sel = document.getElementById("selectText");
                 newText(sel.options[sel.selectedIndex].text);
                 break;
             case "sayit":
@@ -308,7 +327,7 @@ svg {
                     var msg = new SpeechSynthesisUtterance(text);
                     window.speechSynthesis.speak(msg);
                     message.innerHTML = "[Say It only works in Chrome browser.]";
-                }         
+                }
                 break;
             case "boldit":
                 boldIt = !boldIt;
