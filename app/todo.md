@@ -7,3 +7,8 @@
 * Pull in dropdown select from json.
 * Highlight node on mouseover?
 * Use small bar chart for timer?
+
+
+## SHOW VERSE
+Pop words in, random order
+each word has a pre-calc'd space on the grid prior to starting

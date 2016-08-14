@@ -39,6 +39,8 @@
     <Content Include="app\mem_game.css" />
     <Content Include="app\mem_game_d3.v4.js" />
     <Content Include="app\page_control.js" />
+    <Content Include="app\text.html" />
+    <Content Include="app\words.html" />
     <Content Include="data\texts.json" />
     <Content Include="LICENSE" />
     <Content Include="resource\d3.min.js" />
