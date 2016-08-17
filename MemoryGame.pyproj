@@ -34,12 +34,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="app\memoryB.html" />
     <Content Include="app\memory.html" />
     <Content Include="app\ClickToAdd.html" />
     <Content Include="app\mem_game.css" />
     <Content Include="app\mem_game_d3.v4.js" />
     <Content Include="app\page_control.js" />
+    <Content Include="app\restart.svg" />
     <Content Include="app\text.html" />
+    <Content Include="app\gear.svg" />
     <Content Include="app\words.html" />
     <Content Include="data\texts.json" />
     <Content Include="LICENSE" />
