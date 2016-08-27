@@ -50,10 +50,9 @@
 @media (min-width: 550px) {
   .container {
     width: 80%; }
-  .column,
   .columns {
     margin-left: 4%; }
-  .column:first-child, .columns:first-child {
+  .columns:first-child {
     margin-left: 0; }
 
   .one.columns                    { width: 4.66666666667%; }
@@ -98,11 +97,11 @@ are based on 10px sizing. So basically 1.5rem = 15px :) */
 html {
   font-size: 62.5%; }
 body {
-  font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  font-size: 1.4em; /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.6;
   font-weight: 400;
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #222; }
+  color: #840000; }
 
 
 /* Typography */
@@ -114,8 +113,8 @@ h1 { font-size: 4.0rem; line-height: 1.2;  letter-spacing: -.1rem;}
 h2 { font-size: 3.6rem; line-height: 1.2; letter-spacing: -.1rem; }
 h3 { font-size: 3.0rem; line-height: 1.2;  letter-spacing: -.1rem; }
 h4 { font-size: 2.4rem; line-height: 1.2; letter-spacing: -.08rem; }
-h5 { font-size: 1.8rem; line-height: 1.2;  letter-spacing: -.05rem; }
-h6 { font-size: 1.5rem; line-height: 1.2;  letter-spacing: 0; }
+h5 { font-size: 1.8rem; line-height: 1;  letter-spacing: -.05rem; }
+h6 { font-size: 1.5rem; line-height: 1;  letter-spacing: 0; }
 
 /* Larger than phablet */
 @media (min-width: 550px) {
@@ -141,7 +140,7 @@ a:hover {
 /* Buttons */
 .button, button, input[type="submit"], input[type="reset"], input[type="button"] {
   display: inline-block;
-  height: 20px;
+  height: 22px;
   padding: 0 10px;
   color: #840000;
   text-align: center;
@@ -153,34 +152,32 @@ a:hover {
   white-space: nowrap;
   background-color: transparent;
   border-radius: 4px;
-  border: 1px solid #840000;
+  border: 1px solid #c8bfc7;
   cursor: pointer;
   box-sizing: border-box; }
 
 .button:hover, button:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, .button:focus, button:focus, input[type="submit"]:focus, input[type="reset"]:focus, input[type="button"]:focus {
-  color: #000000;
-  border-color: #000000;
-  background-color: #e0e0e2;
+  border-color: #840000;
   outline: 0; }
 
-.svg-button {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  fill: #c8bfc7; }
-.svg-button:hover {
-  fill: #840000; }
+.iconButton {
+  color: #c8bfc7; }
+.iconButton:hover {
+  color: #840000; }
 
 /* Forms */
 input[type="email"], input[type="number"], input[type="search"], input[type="text"], input[type="tel"], input[type="url"], input[type="password"], textarea, select {
   color: #840000;
-  height: 20px;
-  padding: 3px 5px; /* The 6px vertically centers text on FF, ignored by Webkit */
-  background-color: #fff;
-  border: 1px solid #840000;
+  height: 22px;
+  padding: 1px 5px; /* The 6px vertically centers text on FF, ignored by Webkit */
+  border: 1px solid #c8bfc7; 
   border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box; }
+
+select:hover {
+  border-color: #840000;
+}
 
 
 /* Removes awkward default styles on some inputs for iOS */
@@ -278,7 +275,7 @@ hr {
   margin-top: 1rem;
   margin-bottom: 1.5rem;
   border-width: 0;
-  border-top: 1px solid #840000; }
+  border-top: 1px solid #c8bfc7; }
 
 
 /* Clearing */
