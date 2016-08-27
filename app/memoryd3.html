@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Memorizinator</title>
+<style>
+     #container {
+        position: relative;
+        display: inline-block;
+        height: 400px;
+        width: 700px; }
+
+   #gameboard {
+        border: 1px solid #840000;
+        position: relative;
+        width: 100%;
+        height: 100%; }
+
+    .node {
+        stroke: black;
+        stroke-width: 0;
+        position: relative; }
+
+    .text { /* centers text in node */
+        text-anchor: middle;
+        alignment-baseline: central;
+        pointer-events: none;
+        transform: translateY(1%); /* Firefox */
+    }
+
+    .next { /* for boldIt hint */
+        font-weight: bold; }
+
+    .link {
+        stroke: lightgray;
+        stroke-width: 1px; }
+
+
+</style>
+<body>
+    <div id="container">
+        <svg id="gameboard">
+            <rect width="0" height="10" x="3" y="3" id="timerBarBox"></rect>
+            <rect width="0" height="10" x="3" y="3" id="timerBar"></rect>
+            <div></div>
+        </svg>
+
+
+    </div>
+</body>
+<script src="//d3js.org/d3.v4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+    $(function () {
+
+        // ********** EVENTS **********
+        $("body").click(function () {
+            //$('.popup:visible').hide();
+        });
+
+        $("#selectText").change(function () {
+            citation = $("#selectText").val();
+            gameManager('restart');
+        });
+
+        $("#typeit").click(function () {
+            $('#typePop').show();
+            typer();
+        });
+
+        $("#settings").click(function () { $('#setsPop').show(); });
+        $("#restart").click(function () { gameManager('restart'); });
+
+        $("#sayit").click(function () { gameManager('sayit'); });
+        $("#showit").click(function () { gameManager('showit'); });
+        $("#boldit").click(function () { gameManager('boldit'); });
+        $(".close").click(function () { $('.popup:visible').hide(); });
+
+
+        // ********** D3 HAPPENS HERE **********
+        // General variablees
+        var allWordData = [],   // All words (data) from text from json
+            wordData = [],      // Words loaded (data) into simulation from json
+            wordLinks = [],     // Links (data) in the simulation
+            svgWidth = 700,     // Width of the svg palette
+            svgHeight = 400,    // Height of the svg palette
+            initCount = 7,      // Number of words to show at beginning of game
+            answerKey = [],     // An array of wordID's indicating the correct answer
+            playerAnswer = [],  // An array of wordID's indicating the player's answer
+            clickedID = [],     // An array of the players answers
+            foci = [{ x: svgWidth * 0.25, y: svgHeight * 0.45 }, { x: svgWidth * 0.75, y: svgHeight * 0.45 }], // Sets 2 foci on page
+            citation = "Williams Shedd",
+            text,               // The text to be memorized
+            boldIt = false,     // Is the boltIt hint be active?
+            color;              // Node colors
+
+        // Get svg handle, set up color and radius scale (use word length to set size)
+        var svg = d3.select("svg");
+        var radScale = d3.scaleLinear().domain([1, 15]).range([10, 50]);
+
+        // Set forces in the simulation
+        var simulation = d3.forceSimulation()
+            .force("link", d3.forceLink().id(function (d) { return d.id; }))
+            .force("charge", d3.forceManyBody().strength(-50))
+            .force("collide", d3.forceCollide(function (d) { return d.rad; }));
+
+        // Get text from json, then start simulation
+        function build() {
+            d3.json("/data/texts.json", function (error, textsData) {
+
+                // Get and split requested text and split, save text for later use.
+                var keyText = textsData.nodes.filter(function (obj) { if (obj.cit == citation) return true; else return false; });
+                text = keyText[0].text;
+                var kt = text.replace("-", "- ").split(" ");
+
+
+                // Format data, create answerkey
+                for (i = 0; i < kt.length; i++) {
+                    var firstIndex = kt.indexOf(kt[i]);
+                    var firstID = firstIndex > -1 ? Math.min(firstIndex, i) : i;
+                    answerKey.push(firstID);
+
+                    allWordData.push({
+                        word: kt[i],
+                        id: i,
+                        wordid: firstID, // identical words have the same wordid
+                        x: 0,
+                        y: ~~(Math.random() * svgHeight),
+                        rad: radScale(kt[i].length),
+                        clickOrder: 0,  // for later use?
+                        answerSet: 0    // for later use?
+                    })
+                }
+                color = d3.scaleOrdinal().domain(0, 4).range(colorPalette(text.length));
+
+
+                // Push word data into active dataset
+                for (i = 0; i < Math.min(initCount, allWordData.length) ; i++) {
+                    allWordData[i].show = 1;
+                    wordData.push(allWordData[i]);
+                }
+
+                // for (i = 0; i < textsData.links.length ; i++) { wordLinks.push(textsData.links[i]); }
+
+                gameManager("start");
+                start();
+            });
+        }
+        build();
+
+
+        // Build the force simulation
+        function start() {
+
+            // Create links
+            var glinks = svg.selectAll(".link")
+                .data(wordLinks, function (d) { return d.source.id + "-" + d.target.id; })
+                .enter().insert("line", ".gnode").attr("class", "link");
+            //glinks.exit().remove();
+
+            // Create nodes (well, g-elements).  Add circles, text, & event listeners
+            var gnodes = svg.selectAll("g")
+                .data(wordData, function id(d, i) { return d.id; })
+                .enter().append("g").attr("class", function (d) { return "gnode g" + d.id; })
+                .classed("next", function (d) { return (boldIt && d.wordid == 0) ? true : false; });
+            //gnodes.exit().remove();
+
+            var circles = gnodes.append("circle").attr("class", function (d) { return "c" + d.id; })
+                .attr("r", function (d) { return d.rad; }).style("fill", function (d, i) { return color(d.id); })
+                .attr("opacity", 0.7);
+
+            var texts = gnodes.append("text")
+                .attr("class", function (d) { return "text w" + d.id; }) // Tie into CSS
+                .text(function (d) { return (d.word); });
+
+            var actions = gnodes.on("click", nodeClicked);
+
+            // Link data to simulation and set it in motion.
+            simulation.nodes(wordData).force("link").links(wordLinks);
+            simulation.on("tick", ticked).alpha(0.5).restart();
+        }
+
+        // Manage node & link movement
+        function ticked(e) {
+            var k = .2 * simulation.alpha();
+
+            svg.selectAll(".gnode").attr("transform", function (d) {
+                // Set node location, multi-foci
+                d.y += (foci[d.answerSet].y - d.y) * k;
+                d.x += (foci[d.answerSet].x - d.x) * k;
+
+                // But be sure that nodes don't go out-of-bounds
+                d.y = Math.max(d.rad, Math.min(svgHeight - d.rad, d.y));
+                d.x = Math.max(d.rad, Math.min(svgWidth - d.rad, d.x));
+
+                return 'translate(' + [d.x, d.y] + ')';
+            });
+
+            // Set link locations
+            svg.selectAll(".link")
+                .attr("x1", function (d) { return d.source.x; })
+                .attr("y1", function (d) { return d.source.y; })
+                .attr("x2", function (d) { return d.target.x; })
+                .attr("y2", function (d) { return d.target.y; });
+        }
+
+        // User clicked a node
+        function nodeClicked(d) {
+            if (d.answerSet == 0) {
+                d.answerSet = 1; // Moves the gnode over to the answer side.
+                if (allWordData.length > wordData.length) {
+                    allWordData[wordData.length].show = 1;
+                    wordData.push(allWordData[wordData.length]); // Gets the next word.
+                }
+
+                // Add a link between last clicked and new clicked
+                if (clickedID.length > 0) { wordLinks.push({ "source": clickedID.slice(-1)[0], "target": d.id }); }
+                start();
+
+                // Update clickedID and check the answer
+                clickedID.push(d.id);
+                playerAnswer.push(d.wordid);    // Update the players answer
+                svg.selectAll(".text")          // Bold next word
+                    .classed("next", function (d) { return (boldIt && d.wordid == answerKey[playerAnswer.length]) ? true : false; });
+                if (playerAnswer.toString() == answerKey.toString()) { gameManager("win"); } // Check answer or error
+                else if (playerAnswer.toString() != answerKey.slice(0, playerAnswer.length).toString()) { gameManager("incorrect"); }
+            } else {   // d.answerSet == 1
+                d.answerSet == 0;
+                for (var i = clickedID.length - 1; i >= 0; i--) {
+                    id = clickedID[i];
+                    d3.select(".g" + id + " > .c" + id).attr("opacity", 1);
+                    findLinks(id)
+                    if (id == d.id) break;
+                }
+                start();
+                // reset foci
+                // mark as answer = false
+
+            }
+        }
+
+        function findNode(id) {
+
+        }
+
+        function findLinks(id) {
+            for (var i = 0; i < wordLinks.length; i++) {
+                if (id == wordLinks[i].source["id"] || id == wordLinks[i].target["id"]) {
+                    //alert(id);
+                }
+
+                //if (clickedID[i] == d.id) break;
+            }
+        }
+
+        function colorPalette(id) {
+            var palettes = [["#3dc8ff", "#ff3d87", "#ff703d", "#ffc83d", "#e1ff3d"],
+                ["#493548", "#4b4e6d", "#6a8d92", "#80b192", "#a1e887"],
+                ["#335c67", "#fff3b0", "#e09f3e", "#9e2a2b", "#540b0e"],
+                ["#4d9de0", "#e15554", "#e1bc29", "#3bb273", "#7768ae"],
+                ["#202030", "#39304a", "#635c51", "#7d7461", "#b0a990"],
+                ["#f1e0c5", "#c9b79c", "#71816d", "#342a21", "#da667b"],
+                ["#7b7554", "#17183b", "#a11692", "#ff4f79", "#ffb49a"]];
+            return palettes[(id % palettes.length)];
+        }
+
+    });
+</script>

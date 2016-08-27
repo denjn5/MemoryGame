@@ -34,18 +34,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="app\memoryd3.html" />
     <Content Include="app\memory.html" />
     <Content Include="app\ClickToAdd.html" />
-    <Content Include="app\mem_game.css" />
-    <Content Include="app\mem_game_d3.v4.js" />
-    <Content Include="app\page_control.js" />
-    <Content Include="app\text.html" />
-    <Content Include="app\typein - Copy.html" />
     <Content Include="app\typein.html" />
-    <Content Include="app\words_d3.html" />
     <Content Include="data\texts.json" />
     <Content Include="LICENSE" />
-    <Content Include="resource\d3.min.js" />
     <Content Include="resource\jquery-3.0.0.min.js" />
     <Content Include="Resource\Skeleton.css" />
     <Content Include="Resource\SkinnySkeleton.css" />

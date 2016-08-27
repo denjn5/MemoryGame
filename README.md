@@ -20,12 +20,10 @@ A little memory game to help learn big ideas. (Optimized for Chrome browser. Fee
   * Centered text within nodes
 
   
-## TODO
-* Provide player more feedback about wrong choices.
-* Ability to unravel answer?
-* Have colors mean something? (paragraphs?)
-* Improve BoldIt (so it works "now")
-* Add an underscore-based hint system ("I h--- f----- t-- g--- f----.")
-* Pull in dropdown select from json.
-* Highlight node on mouseover?
-* Use small bar chart for timer?
+## D3 TODO
+* Turn circles red when incorrect.
+* Ability to unravel answer.
+* Multiple choice or Pairings game option
+
+## GAME TODO
+* Better score tracking.
