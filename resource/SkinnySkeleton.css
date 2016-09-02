@@ -2,22 +2,6 @@
 
 /* Based on Skeleton V2.0.4 Dave Gamache (www.getskeleton.com) */
 
-/* Table of contents
-- Grid
-- Base Styles
-- Typography
-- Links
-- Buttons
-- Forms
-- Lists
-- Code
-- Tables
-- Spacing
-- Utilities
-- Clearing
-- Media Queries
-*/
-
 
 /* Grid */
 .container {
@@ -27,7 +11,7 @@
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box; }
-.column, .columns {
+.columns {
   width: 100%;
   float: left;
   box-sizing: border-box; }
@@ -123,15 +107,8 @@ p {
   margin-top: 0; }
 
 
-/* Links */
-a {
-  color: #1EAEDB; }
-a:hover {
-  color: #0FA0CE; }
-
-
 /* Buttons */
-.button, button, input[type="submit"], input[type="reset"], input[type="button"] {
+.button {
   display: inline-block;
   height: 22px;
   padding: 0 10px;
@@ -143,23 +120,41 @@ a:hover {
   letter-spacing: .1rem;
   text-decoration: none;
   white-space: nowrap;
-  background-color: transparent;
   border-radius: 4px;
   border: 1px solid #c8bfc7;
   cursor: pointer;
   box-sizing: border-box; }
 
-.button:hover, button:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, .button:focus, button:focus, input[type="submit"]:focus, input[type="reset"]:focus, input[type="button"]:focus {
+.button:hover {
   border-color: #840000;
-  outline: 0; }
+  outline: 0;
+}
 
 .iconButton {
-  color: #c8bfc7; }
+  position: absolute;
+  fill: #c8bfc7;
+  width: 20px;
+  height: 20px;
+}
 .iconButton:hover {
-  color: #840000; }
+  fill: #840000;
+}
+
+.popup {
+  display: none;
+  position: absolute;
+  line-height: 200%;
+  padding: 2%;
+  border: 1px solid #840000;
+  background-color: white;
+  z-index: 1002;
+  overflow: auto;
+  box-shadow: -10px 0 0 100em rgba(209, 200, 208, .6);
+}
+
 
 /* Forms */
-input[type="email"], input[type="number"], input[type="search"], input[type="text"], input[type="tel"], input[type="url"], input[type="password"], textarea, select {
+select {
   color: #840000;
   height: 22px;
   padding: 1px 5px; /* The 6px vertically centers text on FF, ignored by Webkit */
@@ -173,74 +168,6 @@ select:hover {
 }
 
 
-/* Removes awkward default styles on some inputs for iOS */
-input[type="email"], input[type="number"], input[type="search"], input[type="text"], input[type="tel"], input[type="url"], input[type="password"], textarea {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none; }
-textarea {
-  min-height: 65px;
-  padding-top: 6px;
-  padding-bottom: 6px; }
-input[type="email"]:focus, input[type="number"]:focus, input[type="search"]:focus, input[type="text"]:focus, input[type="tel"]:focus, input[type="url"]:focus, input[type="password"]:focus, textarea:focus, select:focus {
-  border: 1px solid #0F0F0F;
-  outline: 0; }
-label, legend {
-  display: block;
-  margin-bottom: .5rem;
-  font-weight: 600; }
-fieldset {
-  padding: 0;
-  border-width: 0; }
-input[type="checkbox"], input[type="radio"] {
-  display: inline; }
-label > .label-body {
-  display: inline-block;
-  margin-left: .5rem;
-  font-weight: normal; }
-
-
-/* Lists */
-ul {
-  list-style: circle inside; }
-ol {
-  list-style: decimal inside; }
-ol, ul {
-  padding-left: 0;
-  margin-top: 0; }
-ul ul, ul ol, ol ol, ol ul {
-  margin: 1.5rem 0 1.5rem 3rem;
-  font-size: 90%; }
-li {
-  margin-bottom: 1rem; }
-
-
-/* Code  */
-code {
-  padding: .2rem .5rem;
-  margin: 0 .2rem;
-  font-size: 90%;
-  white-space: nowrap;
-  background: #F1F1F1;
-  border: 1px solid #E1E1E1;
-  border-radius: 4px; }
-pre > code {
-  display: block;
-  padding: 1rem 1.5rem;
-  white-space: pre; }
-
-
-/* Tables  */
-th, td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #E1E1E1; }
-th:first-child, td:first-child {
-  padding-left: 0; }
-th:last-child, td:last-child {
-  padding-right: 0; }
-
-
 /* Spacing  */
 button, .button {
   margin-bottom: 1rem; }
@@ -248,19 +175,6 @@ input, textarea, select, fieldset {
   margin-bottom: 1.5rem; }
 pre, blockquote, dl, figure, table, p, ul, ol, form {
   margin-bottom: 2.5rem; }
-
-
-/* Utilities  */
-.u-full-width {
-  width: 100%;
-  box-sizing: border-box; }
-.u-max-full-width {
-  max-width: 100%;
-  box-sizing: border-box; }
-.u-pull-right {
-  float: right; }
-.u-pull-left {
-  float: left; }
 
 
 /* Misc */

@@ -1,26 +1,21 @@
 ﻿<!DOCTYPE html>
 <meta charset="utf-8">
 <title>Memorizinator</title>
-<link rel="stylesheet" href="/resource/SkinnySkeleton.css" type="text/css" media="screen" /> 
+<link rel="stylesheet" href="/resource/skinnyskeleton.css" type="text/css" media="screen" />
 <style>
-
-    @import url(http://weloveiconfonts.com/api/?family=entypo);
-    [class*="entypo-"]:before { /* entypo */
-        font-family: 'entypo', sans-serif;
-        cursor: pointer;
-    }
-
-     #container {
+    #container {
         position: relative;
         display: inline-block;
         height: 400px;
-        width: 700px; }
+        width: 700px;
+    }
 
-   #gameboard {
+    #gameboard {
         border: 1px solid #840000;
         position: relative;
         width: 100%;
-        height: 100%; }
+        height: 100%;
+    }
 
     .gnode > circle:hover {
         stroke: #e0e0e2;
@@ -35,47 +30,39 @@
     }
 
     .next { /* for boldIt hint */
-        font-weight: bold; }
+        font-weight: bold;
+    }
 
     .link {
         stroke: lightgray;
-        stroke-width: 1px; }
+        stroke-width: 1px;
+    }
 
     #selectQuote {
         position: absolute;
         top: 3px;
-        right: 2px; }
+        right: 2px;
+    }
 
     #message {
         position: absolute;
         bottom: 2px;
-        left: 3px; }
+        left: 3px;
+    }
 
     #restart {
-        position: absolute;
         bottom: 2px;
-        right: 4px; }
+        right: 4px;
+    }
 
     #settings {
-        position: absolute;
         bottom: 2px;
-        right: 24px; }
+        right: 28px;
+    }
 
     #typeit {
-        position: absolute;
         bottom: 2px;
-        right: 48px; }
-
-    .popup {
-	    display: none;
-	    position: absolute;
-        line-height: 200%;
-        padding: 2%;
-        border: 1px solid #840000;
-	    background-color: white;
-	    z-index: 1002;
-	    overflow: auto;
-        box-shadow: -10px 0 0 100em rgba(209, 200, 208, .6);
+        right: 56px;
     }
 
     #setsPop {
@@ -94,36 +81,38 @@
 
     #timerBar {
         fill: #840000;
-        opacity: 0.7; }
-    #timerBarBox {
-        fill: #e0e0e2; }
+        opacity: 0.7;
+    }
 
+    #timerBarBox {
+        fill: #e0e0e2;
+    }
 </style>
 <body>
     <div id="container">
         <svg id="gameboard">
             <rect width="0" height="10" x="3" y="3" id="timerBarBox"></rect>
             <rect width="0" height="10" x="3" y="3" id="timerBar"></rect>
-            <div></div>
         </svg>
 
         <select id="selectQuote"></select>
         <div id="message"><b>Memorizinator</b> (A little game to help you learn big ideas.)</div>
 
-        <span id="settings" class="entypo-tools iconButton" title="Show Settings"></span>
-        <span id="restart" class="entypo-arrows-ccw iconButton" title="Restart round"></span>
-        <span id="typeit" class="entypo-keyboard iconButton" title="Type it"></span>
-        <div id="setsPop" class="popup"> 
+
+        <svg id="settings" class="iconButton" viewBox="0 0 20 20" xml:space="preserve"><path d="M5,1.6C5,1.047,4.552,1,4,1C3.447,1,3,1.047,3,1.6V10h2V1.6z M3,18.4C3,18.951,3.447,19,4,19c0.552,0,1-0.049,1-0.6V15H3 V18.4z M6.399,11H1.599C1.046,11,1,11.448,1,12v1c0,0.553,0.046,1,0.599,1h4.801C6.95,14,7,13.553,7,13v-1 C7,11.448,6.95,11,6.399,11z M18.399,12h-4.801C13.046,12,13,12.448,13,13v1c0,0.553,0.046,1,0.599,1h4.801 C18.95,15,19,14.553,19,14v-1C19,12.448,18.95,12,18.399,12z M13,7c0-0.552-0.05-1-0.601-1H7.599C7.046,6,7,6.448,7,7v1 c0,0.553,0.046,1,0.599,1h4.801C12.95,9,13,8.553,13,8V7z M11,1.6C11,1.047,10.552,1,10,1C9.447,1,9,1.047,9,1.6V5h2V1.6z M9,18.4 c0,0.551,0.447,0.6,1,0.6c0.552,0,1-0.049,1-0.6V10H9V18.4z M17,1.6C17,1.047,16.552,1,16,1c-0.553,0-1,0.047-1,0.6V11h2V1.6z M15,18.4c0,0.551,0.447,0.6,1,0.6c0.552,0,1-0.049,1-0.6V16h-2V18.4z"><title>Show Settings</title></path></svg>
+        <svg id="restart" class="iconButton" viewBox="0 0 20 20" xml:space="preserve"><path d="M5.516,14.224c-2.262-2.432-2.222-6.244,0.128-8.611c0.962-0.969,2.164-1.547,3.414-1.736L8.989,1.8 C7.234,2.013,5.537,2.796,4.192,4.151c-3.149,3.17-3.187,8.289-0.123,11.531l-1.741,1.752l5.51,0.301l-0.015-5.834L5.516,14.224z M12.163,2.265l0.015,5.834l2.307-2.322c2.262,2.434,2.222,6.246-0.128,8.611c-0.961,0.969-2.164,1.547-3.414,1.736l0.069,2.076 c1.755-0.213,3.452-0.996,4.798-2.35c3.148-3.172,3.186-8.291,0.122-11.531l1.741-1.754L12.163,2.265z"><title>Restart game</title></path></svg>
+        <svg id="typeit" class="iconButton" viewBox="0 0 20 20" xml:space="preserve"><path d="M18.6,4h-17.2C0.629,4,0,4.629,0,5.4V14.6C0,15.369,0.629,16,1.399,16h17.2c0.77,0,1.4-0.631,1.4-1.4V5.4 C20,4.629,19.369,4,18.6,4z M11,6h2v2h-2V6z M14,9v2h-2V9H14z M8,6h2v2H8V6z M11,9v2H9V9H11z M5,6h2v2H5V6z M8,9v2H6V9H8z M2,6h2v2 H2V6z M5,9v2H3V9H5z M4,14H2v-2h2V14z M15,14H5v-2h10V14z M18,14h-2v-2h2V14z M15,11V9h2v2H15z M18,8h-4V6h4V8z"><title>Type out the quote for me</title></path></svg>
+        <div id="setsPop" class="popup">
             <div class="row">
                 <div class="eleven columns"><h5>Settings</h5></div>
-                <div class="iconButton close one columns entypo-cancel" id="setsPopClose"></div>
+                <div class="one columns"><svg class="close iconButton" viewBox="0 0 20 20" xml:space="preserve"><path d="M14.348,14.849c-0.469,0.469-1.229,0.469-1.697,0L10,11.819l-2.651,3.029c-0.469,0.469-1.229,0.469-1.697,0 c-0.469-0.469-0.469-1.229,0-1.697l2.758-3.15L5.651,6.849c-0.469-0.469-0.469-1.228,0-1.697c0.469-0.469,1.228-0.469,1.697,0 L10,8.183l2.651-3.031c0.469-0.469,1.228-0.469,1.697,0c0.469,0.469,0.469,1.229,0,1.697l-2.758,3.152l2.758,3.15 C14.817,13.62,14.817,14.38,14.348,14.849z"><title>Close popup</title></path></svg></div>
             </div>
             <hr />
             <div class="row">
-                <div class="button three columns" id="sayIt" title="Reads the quote to you. Click again to silence.">Say It</div>
-                <div class="button three columns" id="showIt" title="Show the quote. Click again to hide.">Show It</div>
-                <div class="button three columns" id="showHint" title="Show the 1st letter of each word in the quote. Click again to hide.">Show Hint</div>
-                <div class="button three columns" id="boldIt" title="Bold the next word you need to click. Click again to turn off.">Bold It</div>
+                <div class="button three columns" id="sayIt" title="Reads the quote to you. Click again to silence."> Say It</div>
+                <div class="button three columns" id="showIt" title="Show the quote. Click again to hide."> Show It</div>
+                <div class="button three columns" id="showHint" title="Show the 1st letter of each word in the quote. Click again to hide."> Show Hint</div>
+                <div class="button three columns" id="boldIt" title="Bold the next word you need to click. Click again to turn off."> Bold It</div>
             </div>
             <div class="row">
                 <div id="setsMessage" class="twelve columns"></div>
@@ -132,7 +121,7 @@
         <div id="typePop" class="popup">
             <div class="row">
                 <div class="eleven columns"><h5 id="typeCitation"></h5></div>
-                <div class="iconButton close one columns entypo-cancel"></div>
+                <div class="one columns"><svg class="close iconButton" viewBox="0 0 20 20" xml:space="preserve"><path d="M14.348,14.849c-0.469,0.469-1.229,0.469-1.697,0L10,11.819l-2.651,3.029c-0.469,0.469-1.229,0.469-1.697,0 c-0.469-0.469-0.469-1.229,0-1.697l2.758-3.15L5.651,6.849c-0.469-0.469-0.469-1.228,0-1.697c0.469-0.469,1.228-0.469,1.697,0 L10,8.183l2.651-3.031c0.469-0.469,1.228-0.469,1.697,0c0.469,0.469,0.469,1.229,0,1.697l-2.758,3.152l2.758,3.15 C14.817,13.62,14.817,14.38,14.348,14.849z"><title>Close popup</title></path></svg></div>
             </div>
             <hr />
             <div class="row">
@@ -174,8 +163,7 @@
 
         // ********** D3 HAPPENS HERE **********
         // General variablees
-        var allWordData = [],   // All words (data) from text from json
-            wordData = [],      // Words loaded (data) into simulation from json
+        var wordData = [],   // All words (data) from text from json
             wordLinks = [],     // Links (data) in the simulation
             svgWidth = 700,     // Width of the svg palette
             svgHeight = 400,    // Height of the svg palette
@@ -190,7 +178,7 @@
             color;              // Node colors
 
         // Get svg handle, set up color and radius scale (use word length to set size)
-        var svg = d3.select("svg");
+        var svg = d3.select("#gameboard");
         var radScale = d3.scaleLinear().domain([1, 15]).range([10, 50]);
 
         // Set forces in the simulation
@@ -223,13 +211,14 @@
                     var firstID = firstIndex > -1 ? Math.min(firstIndex, i) : i;
                     answerKey.push(firstID);
 
-                    allWordData.push({
+                    wordData.push({
                         word: kt[i],
                         id: i,
                         wordid: firstID, // identical words have the same wordid
                         x: 0,
                         y: ~~(Math.random() * svgHeight),
                         rad: radScale(kt[i].length),
+                        show: 0,
                         clickOrder: 0,  // for later use?
                         answerSet: 0    // for later use?
                     })
@@ -237,10 +226,9 @@
                 color = d3.scaleOrdinal().domain(0, 4).range(colorPalette(quote.length));
 
 
-                // Push word data into active dataset
-                for (i = 0; i < Math.min(initCount, allWordData.length) ; i++) {
-                    allWordData[i].show = 1;
-                    wordData.push(allWordData[i]);
+                // Push word data into active dataset // TODO: Review for simplifcation
+                for (i = 0; i < Math.min(initCount, wordData.length) ; i++) {
+                    wordData[i].show = 1;
                 }
 
                 // for (i = 0; i < quotesData.links.length ; i++) { wordLinks.push(quotesData.links[i]); }
@@ -254,7 +242,7 @@
 
         // Build the force simulation
         function start() {
-
+            
             // Create links
             var glinks = svg.selectAll(".link")
                 .data(wordLinks, function (d) { return d.source.id + "-" + d.target.id; })
@@ -263,7 +251,7 @@
 
             // Create nodes (well, g-elements).  Add circles, text, & event listeners
             var gnodes = svg.selectAll("g")
-                .data(wordData, function id(d, i) { return d.id; })
+                .data(words("shown"), function id(d, i) { return d.id; })
                 .enter().append("g").attr("class", function (d) { return "gnode g" + d.id; })
                 .classed("next", function (d) { return (boldIt && d.wordid == 0) ? true : false ; });
             //gnodes.exit().remove();
@@ -279,7 +267,7 @@
             var actions = gnodes.on("click", nodeClicked);
 
             // Link data to simulation and set it in motion.
-            simulation.nodes(wordData).force("link").links(wordLinks);
+            simulation.nodes(words("shown")).force("link").links(wordLinks);
             simulation.on("tick", ticked).alpha(0.5).restart();
         }
 
@@ -311,9 +299,8 @@
         function nodeClicked(d) {
             if (d.answerSet == 0) {
                 d.answerSet = 1; // Moves the gnode over to the answer side.
-                if (allWordData.length > wordData.length) {
-                    allWordData[wordData.length].show = 1;
-                    wordData.push(allWordData[wordData.length]); // Gets the next word.
+                if (wordData.length > words("shown").length) {
+                    wordData[words("shown").length].show = 1;
                 }
 
                 // Add a link between last clicked and new clicked
@@ -331,7 +318,7 @@
                 d.answerSet == 0;
                 for (var i = clickedID.length - 1; i >= 0; i--) {
                     id = clickedID[i];
-                    d3.select(".g" + id + " > .c" + id).attr("opacity", 1);
+                    svg.select(".g" + id + " > .c" + id).attr("opacity", 1);
                     findLinks(id)
                     if (id == d.id) break;
                 }
@@ -340,6 +327,13 @@
                 // mark as answer = false
 
             }
+        }
+
+        // Return portion of wordData needed.
+        function words(portion) {
+            return wordData.filter(function (value, index) {
+                if (portion == "shown") { return value.show == 1 ? true : false; }
+            })
         }
 
         function findNode(id) {
@@ -382,7 +376,7 @@
                     $("#timerBar").attr("width", timerLength > 0 ? timerLength * 2 : 0).attr("opacity", (timerLength > 10 ? 0.5 : 1));
                     break;
                 case "start":
-                    timerLength = ~~(allWordData.length * 1.5);
+                    timerLength = ~~(wordData.length * 1.5);
                     clearInterval(timer);
                     timer = setInterval(gameTimer, 1000);
                     $("#timerBar").attr("width", timerLength * 2);
@@ -400,14 +394,15 @@
                     break;
                 case "restart":
                     clickedID = [];
-                    allWordData = [];   // All words (data) from quote from json
-                    wordData = [];      // Words loaded (data) into simulation from json
+                    wordData = [];   // All words (data) from quote from json
                     wordLinks = [];     // Links (data) in the simulation
                     answerKey = [];     // The right answer
                     playerAnswer = [];  //
 
-                    d3.selectAll("g, .link").remove();
-                    //start(); // TODO: Use in future to remove nodes / links properly
+                    svg.selectAll("g, .link").remove();
+                    //var gnodes = svg.selectAll("g").data(words("shown"), function id(d, i) { return d.id; }).exit().remove("g");
+                    //var glinks = svg.selectAll(".link").data(wordLinks, function (d) { return d.source.id + "-" + d.target.id; }).exit().remove();
+
                     build();
                     break;
                 case "sayIt":
@@ -431,7 +426,7 @@
                     $('#setsMessage').text("Click again to hide.");
                     hint = quote.replace(/(\B[a-z])/g, "-");
                     $('#message').text($('#message').text() == hint ? "" : hint);
-                    break; 
+                    break;
 
             }
         }
@@ -458,7 +453,6 @@
 
             // Type the quote
             function updateQuote() {
-
                 if (char < quote.length) {
                     $('#typeQuote').append(quote[char++]);
                     setTimeout(updateQuote, 25);
@@ -489,7 +483,6 @@
                     return html;
                 });
             }
-
 
             // Color the chosen words
             function colorMe() {

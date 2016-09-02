@@ -28,3 +28,5 @@ A little memory game to help learn big ideas. (Feedback welcome)
 
 ## GAME TODO
 * Better score tracking.
+* New option: Ignore punctuation for checking
+* Make "typein" a full-fledged answer.
