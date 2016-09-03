@@ -6,8 +6,6 @@
     #container {
         position: relative;
         display: inline-block;
-        height: 400px;
-        width: 700px;
     }
 
     #gameboard {
@@ -98,7 +96,6 @@
         <select id="selectQuote"></select>
         <div id="message"><b>Memorizinator</b> (A little game to help you learn big ideas.)</div>
 
-
         <svg id="settings" class="iconButton" viewBox="0 0 20 20" xml:space="preserve"><path d="M5,1.6C5,1.047,4.552,1,4,1C3.447,1,3,1.047,3,1.6V10h2V1.6z M3,18.4C3,18.951,3.447,19,4,19c0.552,0,1-0.049,1-0.6V15H3 V18.4z M6.399,11H1.599C1.046,11,1,11.448,1,12v1c0,0.553,0.046,1,0.599,1h4.801C6.95,14,7,13.553,7,13v-1 C7,11.448,6.95,11,6.399,11z M18.399,12h-4.801C13.046,12,13,12.448,13,13v1c0,0.553,0.046,1,0.599,1h4.801 C18.95,15,19,14.553,19,14v-1C19,12.448,18.95,12,18.399,12z M13,7c0-0.552-0.05-1-0.601-1H7.599C7.046,6,7,6.448,7,7v1 c0,0.553,0.046,1,0.599,1h4.801C12.95,9,13,8.553,13,8V7z M11,1.6C11,1.047,10.552,1,10,1C9.447,1,9,1.047,9,1.6V5h2V1.6z M9,18.4 c0,0.551,0.447,0.6,1,0.6c0.552,0,1-0.049,1-0.6V10H9V18.4z M17,1.6C17,1.047,16.552,1,16,1c-0.553,0-1,0.047-1,0.6V11h2V1.6z M15,18.4c0,0.551,0.447,0.6,1,0.6c0.552,0,1-0.049,1-0.6V16h-2V18.4z"><title>Show Settings</title></path></svg>
         <svg id="restart" class="iconButton" viewBox="0 0 20 20" xml:space="preserve"><path d="M5.516,14.224c-2.262-2.432-2.222-6.244,0.128-8.611c0.962-0.969,2.164-1.547,3.414-1.736L8.989,1.8 C7.234,2.013,5.537,2.796,4.192,4.151c-3.149,3.17-3.187,8.289-0.123,11.531l-1.741,1.752l5.51,0.301l-0.015-5.834L5.516,14.224z M12.163,2.265l0.015,5.834l2.307-2.322c2.262,2.434,2.222,6.246-0.128,8.611c-0.961,0.969-2.164,1.547-3.414,1.736l0.069,2.076 c1.755-0.213,3.452-0.996,4.798-2.35c3.148-3.172,3.186-8.291,0.122-11.531l1.741-1.754L12.163,2.265z"><title>Restart game</title></path></svg>
         <svg id="typeit" class="iconButton" viewBox="0 0 20 20" xml:space="preserve"><path d="M18.6,4h-17.2C0.629,4,0,4.629,0,5.4V14.6C0,15.369,0.629,16,1.399,16h17.2c0.77,0,1.4-0.631,1.4-1.4V5.4 C20,4.629,19.369,4,18.6,4z M11,6h2v2h-2V6z M14,9v2h-2V9H14z M8,6h2v2H8V6z M11,9v2H9V9H11z M5,6h2v2H5V6z M8,9v2H6V9H8z M2,6h2v2 H2V6z M5,9v2H3V9H5z M4,14H2v-2h2V14z M15,14H5v-2h10V14z M18,14h-2v-2h2V14z M15,11V9h2v2H15z M18,8h-4V6h4V8z"><title>Type out the quote for me</title></path></svg>
@@ -109,10 +106,10 @@
             </div>
             <hr />
             <div class="row">
-                <div class="button three columns" id="sayIt" title="Reads the quote to you. Click again to silence."> Say It</div>
-                <div class="button three columns" id="showIt" title="Show the quote. Click again to hide."> Show It</div>
-                <div class="button three columns" id="showHint" title="Show the 1st letter of each word in the quote. Click again to hide."> Show Hint</div>
-                <div class="button three columns" id="boldIt" title="Bold the next word you need to click. Click again to turn off."> Bold It</div>
+                <div class="button three columns" id="sayIt" title="Reads the quote to you. Click again to silence.">Say It</div>
+                <div class="button three columns" id="showIt" title="Show the quote. Click again to hide.">Show It</div>
+                <div class="button three columns" id="showHint" title="Show the 1st letter of each word in the quote. Click again to hide.">Show Hint</div>
+                <div class="button three columns" id="boldIt" title="Bold the next word you need to click. Click again to turn off.">Bold It</div>
             </div>
             <div class="row">
                 <div id="setsMessage" class="twelve columns"></div>
@@ -168,9 +165,6 @@
             svgWidth = 700,     // Width of the svg palette
             svgHeight = 400,    // Height of the svg palette
             initCount = 7,      // Number of words to show at beginning of game
-            answerKey = [],     // An array of wordID's indicating the correct answer
-            playerAnswer = [],  // An array of wordID's indicating the player's answer
-            clickedID = [],     // An array of the players answers
             foci = [{ x: svgWidth * 0.25, y: svgHeight * 0.45 }, { x: svgWidth * 0.75, y: svgHeight * 0.45 }], // Sets 2 foci on page
             citation = "Williams Shedd",
             quote,               // The quote to be memorized
@@ -178,6 +172,7 @@
             color;              // Node colors
 
         // Get svg handle, set up color and radius scale (use word length to set size)
+        $("#container").css("width", svgWidth).css("height", svgHeight); //TODO: set width here
         var svg = d3.select("#gameboard");
         var radScale = d3.scaleLinear().domain([1, 15]).range([10, 50]);
 
@@ -207,20 +202,15 @@
 
                 // Format data, create answerkey
                 for (i = 0; i < kt.length; i++) {
-                    var firstIndex = kt.indexOf(kt[i]);
-                    var firstID = firstIndex > -1 ? Math.min(firstIndex, i) : i;
-                    answerKey.push(firstID);
-
                     wordData.push({
-                        word: kt[i],
-                        id: i,
-                        wordid: firstID, // identical words have the same wordid
-                        x: 0,
+                        word: kt[i],    // the actual word
+                        id: i,          // the original index
+                        x: 0,       
                         y: ~~(Math.random() * svgHeight),
-                        rad: radScale(kt[i].length),
-                        show: 0,
-                        clickOrder: 0,  // for later use?
-                        answerSet: 0    // for later use?
+                        rad: radScale(kt[i].length),    // the radius
+                        show: 0,        // is this node showing
+                        clickOrder: 0,  // what order was it clicked on by user?
+                        answerSet: 0    // is is part of the answer set; controls focii
                     })
                 }
                 color = d3.scaleOrdinal().domain(0, 4).range(colorPalette(quote.length));
@@ -251,9 +241,9 @@
 
             // Create nodes (well, g-elements).  Add circles, text, & event listeners
             var gnodes = svg.selectAll("g")
-                .data(words("shown"), function id(d, i) { return d.id; })
+                .data(words("show", 1), function id(d, i) { return d.id; })
                 .enter().append("g").attr("class", function (d) { return "gnode g" + d.id; })
-                .classed("next", function (d) { return (boldIt && d.wordid == 0) ? true : false ; });
+                .classed("next", function (d) { return (boldIt && d.id == 0) ? true : false ; });
             //gnodes.exit().remove();
 
             var circles = gnodes.append("circle").attr("class", function (d) { return "c" + d.id; })
@@ -267,7 +257,7 @@
             var actions = gnodes.on("click", nodeClicked);
 
             // Link data to simulation and set it in motion.
-            simulation.nodes(words("shown")).force("link").links(wordLinks);
+            simulation.nodes(words("show", 1)).force("link").links(wordLinks);
             simulation.on("tick", ticked).alpha(0.5).restart();
         }
 
@@ -297,31 +287,31 @@
 
         // User clicked a node
         function nodeClicked(d) {
-            if (d.answerSet == 0) {
+            if (d.answerSet == 0) { // A node from the unused side
                 d.answerSet = 1; // Moves the gnode over to the answer side.
-                if (wordData.length > words("shown").length) {
-                    wordData[words("shown").length].show = 1;
-                }
-
-                // Add a link between last clicked and new clicked
-                if (clickedID.length > 0) { wordLinks.push({ "source": clickedID.slice(-1)[0], "target": d.id }); }
+                var answerLength = words("answerSet", 1).length; // includes just-clicked answer
+                d.clickOrder = answerLength; // Set clickOrder
+                if (wordData.length > words("show", 1).length) { wordData[words("show", 1).length].show = 1; } // Show next node
+                if (answerLength > 1) { wordLinks.push({ "source": words("clickOrder", d.clickOrder - 1)[0].id, "target": d.id }); } // Add link
                 start();
 
-                // Update clickedID and check the answer
-                clickedID.push(d.id);
-                playerAnswer.push(d.wordid);    // Update the players answer
-                svg.selectAll(".text")          // Bold next word
-                    .classed("next", function (d) { return (boldIt && d.wordid == answerKey[playerAnswer.length]) ? true : false; });
-                if (playerAnswer.toString() == answerKey.toString()) { gameManager("win"); } // Check answer or error
-                else if (playerAnswer.toString() != answerKey.slice(0, playerAnswer.length).toString()) { gameManager("incorrect"); }
-            } else {   // d.answerSet == 1
-                d.answerSet == 0;
-                for (var i = clickedID.length - 1; i >= 0; i--) {
-                    id = clickedID[i];
-                    svg.select(".g" + id + " > .c" + id).attr("opacity", 1);
-                    findLinks(id)
-                    if (id == d.id) break;
+                svg.selectAll(".text").classed("next", function (d) { return (boldIt && d.index == answerLength) ? true : false; });  // Bold next word
+
+                var allCorrect = true;
+                for (i = 0; i < answerLength; i++) {  // cycle thru wordData by clickOrder (base 1); compare with wordData (correct answers)
+                    if (words("clickOrder", i + 1)[0].word != wordData[i].word) { allCorrect = false; break; }
                 }
+                if (!allCorrect) { gameManager("incorrect"); }
+                else if (wordData.length == answerLength) { gameManager("win"); }
+
+            } else {   // d.answerSet == 1
+                //d.answerSet == 0;
+                //for (var i = clickedID.length - 1; i >= 0; i--) {
+                //    id = clickedID[i];
+                //    svg.select(".g" + id + " > .c" + id).attr("opacity", 1);
+                //    findLinks(id)
+                //    if (id == d.id) break;
+                //}
                 start();
                 // reset foci
                 // mark as answer = false
@@ -330,10 +320,18 @@
         }
 
         // Return portion of wordData needed.
-        function words(portion) {
-            return wordData.filter(function (value, index) {
-                if (portion == "shown") { return value.show == 1 ? true : false; }
-            })
+        function words(key, val) {
+            switch (key) {
+                case "show": // returns an array of the shown nodes [val = 1] or unshown [val = 0]
+                    return wordData.filter(function (value, index) { return value.show == val ? true : false; });
+                    break;
+                case "answerSet": // returns an array of the answerSet nodes [val = 1] or un-answerSet [val = 0]
+                    return wordData.filter(function (value, index) { return value.answerSet == val ? true : false; });
+                    break;
+                case "clickOrder": // returns an array with the single requested clickOrder item
+                    return wordData.filter(function (value, index) { return value.clickOrder == val ? true : false; });
+                    break;
+            }
         }
 
         function findNode(id) {
@@ -345,8 +343,6 @@
                 if (id == wordLinks[i].source["id"] || id == wordLinks[i].target["id"]) {
                     //alert(id);
                 }
-
-                //if (clickedID[i] == d.id) break;
             }
         }
 
@@ -393,14 +389,11 @@
                     clearInterval(timer);
                     break;
                 case "restart":
-                    clickedID = [];
                     wordData = [];   // All words (data) from quote from json
                     wordLinks = [];     // Links (data) in the simulation
-                    answerKey = [];     // The right answer
-                    playerAnswer = [];  //
 
                     svg.selectAll("g, .link").remove();
-                    //var gnodes = svg.selectAll("g").data(words("shown"), function id(d, i) { return d.id; }).exit().remove("g");
+                    //var gnodes = svg.selectAll("g").data(words("show", 1), function id(d, i) { return d.id; }).exit().remove("g");
                     //var glinks = svg.selectAll(".link").data(wordLinks, function (d) { return d.source.id + "-" + d.target.id; }).exit().remove();
 
                     build();
@@ -427,7 +420,6 @@
                     hint = quote.replace(/(\B[a-z])/g, "-");
                     $('#message').text($('#message').text() == hint ? "" : hint);
                     break;
-
             }
         }
 
